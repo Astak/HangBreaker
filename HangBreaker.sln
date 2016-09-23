@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangBreaker", "HangBreaker\HangBreaker.csproj", "{9AD26EE5-0DCC-42BE-BD02-57D4BAF052A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangBreaker.Tests", "HangBreaker.Tests\HangBreaker.Tests.csproj", "{DF14F1C0-AA43-4CAC-911B-091D480DFE86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AD26EE5-0DCC-42BE-BD02-57D4BAF052A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD26EE5-0DCC-42BE-BD02-57D4BAF052A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD26EE5-0DCC-42BE-BD02-57D4BAF052A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD26EE5-0DCC-42BE-BD02-57D4BAF052A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF14F1C0-AA43-4CAC-911B-091D480DFE86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF14F1C0-AA43-4CAC-911B-091D480DFE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF14F1C0-AA43-4CAC-911B-091D480DFE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF14F1C0-AA43-4CAC-911B-091D480DFE86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
