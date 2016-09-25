@@ -38,7 +38,7 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Restart() {
-            throw new System.NotImplementedException();
+            UpdateState(ViewModelState.Preview);
         }
 
         public void Tick() {
