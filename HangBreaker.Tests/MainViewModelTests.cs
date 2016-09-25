@@ -66,9 +66,9 @@ namespace HangBreaker.Tests {
                     Assert.IsFalse(startAction.Enabled);
                     Assert.IsTrue(restartAction.Enabled);
                     Assert.IsTrue(timerAction.Enabled);
-                    Assert.AreEqual<string>("00:08:10", displayControl.Value);
+                    Assert.AreEqual<string>("00:06:10", displayControl.Value);
                 }
-                if (i == 402) Assert.AreEqual<string>("00:04:18", displayControl.Value);
+                if (i == 402) Assert.AreEqual<string>("00:03:18", displayControl.Value);
                 timerAction.Execute();
             }
 

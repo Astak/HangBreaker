@@ -11,7 +11,7 @@ namespace HangBreaker.ViewModels {
             DisplayText = "Hello";
         }
 
-        public virtual string DisplayText { get; set; }
+        public virtual string DisplayText { get; protected set; }
 
         public bool CanStart() {
             return State == ViewModelState.Initial || State == ViewModelState.PreviewOverflow;
@@ -43,14 +43,16 @@ namespace HangBreaker.ViewModels {
 
         public void Tick() {
             if (!(State == ViewModelState.Preview || State == ViewModelState.Work)) return;
-            if (--Elapsed > 0) return;
-            switch (State) {
-                case ViewModelState.Preview:
-                    UpdateState(ViewModelState.PreviewOverflow);
-                    break;
-                case ViewModelState.Work:
-                    UpdateState(ViewModelState.WorkOverflow);
-                    break;
+            if (--Elapsed > 0) UpdateDisplayText();
+            else {
+                switch (State) {
+                    case ViewModelState.Preview:
+                        UpdateState(ViewModelState.PreviewOverflow);
+                        break;
+                    case ViewModelState.Work:
+                        UpdateState(ViewModelState.WorkOverflow);
+                        break;
+                }
             }
         }
 
@@ -71,7 +73,21 @@ namespace HangBreaker.ViewModels {
         }
 
         private void UpdateDisplayText() {
-            DisplayText = string.Format(CultureInfo.CurrentUICulture, "{0}", TimeSpan.FromSeconds(10 * 60 + Elapsed));
+            switch (State) {
+                case ViewModelState.Initial:
+                    DisplayText = "Hello";
+                    break;
+                case ViewModelState.Preview:
+                    DisplayText = string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(10 * 60 + Elapsed));
+                    break;
+                case ViewModelState.Work:
+                    DisplayText = string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(Elapsed));
+                    break;
+                case ViewModelState.PreviewOverflow:
+                case ViewModelState.WorkOverflow:
+                    DisplayText = "Overtime";
+                    break;
+            }
         }
 
         private enum ViewModelState { Initial, Preview, PreviewOverflow, Work, WorkOverflow }
