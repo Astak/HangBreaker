@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAction.cs" />
     <Compile Include="TestControl.cs" />
+    <Compile Include="TestMainView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HangBreaker\HangBreaker.csproj">
