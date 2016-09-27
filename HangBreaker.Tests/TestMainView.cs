@@ -63,5 +63,9 @@ namespace HangBreaker.Tests {
             Context.Dispose();
             Context = null;
         }
+
+        public void WaitFor(int seconds) {
+            for (int i = 0; i < seconds; i++) TimerAction.Execute();
+        }
     }
 }

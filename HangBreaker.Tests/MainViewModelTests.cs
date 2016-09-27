@@ -3,19 +3,20 @@
 namespace HangBreaker.Tests {
     [TestClass]
     public class MainViewModelTests {
+        private const int ReviewInterval = 5 * 60;
+        private const int WorkInterval = 10 * 60;
+
         [TestMethod]
         public void StartActionTest() {
             var mainView = new TestMainView();
             mainView.TestInitialState();
             mainView.StartAction.Execute();
             mainView.TestReviewState();
-            int interval = 5 * 60;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(ReviewInterval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
             mainView.TestWorkState();
-            interval = 10 * 60;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(WorkInterval);
             mainView.TestWorkOverflowState();
             mainView.Invalidate();
         }
@@ -24,41 +25,34 @@ namespace HangBreaker.Tests {
         public void RestartActionTest() {
             var mainView = new TestMainView();
             mainView.StartAction.Execute();
-            int interval = 147;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(147);
             mainView.TestReviewState();
             mainView.RestartAction.Execute();
-            int testInterval1 = 60 * 3 + 7;
-            for (int i = 0; i < testInterval1; i++) mainView.TimerAction.Execute();
+            int interval = 187;
+            mainView.WaitFor(interval);
             mainView.TestReviewState();
-            interval = 5 * 60 - testInterval1;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.RestartAction.Execute();
-            int testInterval2 = 39;
-            for (int i = 0; i < testInterval2; i++) mainView.TimerAction.Execute();
+            interval = 39;
+            mainView.WaitFor(interval);
             mainView.TestReviewState();
-            interval = 60 * 5 - testInterval2;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
-            interval = 66;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(66);
             mainView.TestWorkState();
             mainView.RestartAction.Execute();
-            int testInterval3 = 2 * 60 + 24;
-            for (int i = 0; i < testInterval3; i++) mainView.TimerAction.Execute();
+            interval = 154;
+            mainView.WaitFor(interval);
             mainView.TestReviewState();
-            interval = 5 * 60 - testInterval3;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
-            interval = 10 * 60;
-            for (int i = 0; i < interval; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(WorkInterval);
             mainView.TestWorkOverflowState();
             mainView.RestartAction.Execute();
-            int testInterval4 = 4 * 60 + 36;
-            for (int i = 0; i < testInterval4; i++) mainView.TimerAction.Execute();
+            mainView.WaitFor(276);
             mainView.TestReviewState();
             mainView.Invalidate();
         }
