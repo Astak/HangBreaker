@@ -56,5 +56,30 @@ namespace HangBreaker.Tests {
             mainView.TestReviewState();
             mainView.Invalidate();
         }
+
+        [TestMethod]
+        public void DisplayTest() {
+            var mainView = new TestMainView();
+            Assert.AreEqual<string>("Hello", mainView.DisplayControl.Value);
+            mainView.StartAction.Execute();
+            Assert.AreEqual<string>("00:15:00", mainView.DisplayControl.Value);
+            int interval = 19;
+            mainView.WaitFor(interval);
+            Assert.AreEqual<string>("00:14:41", mainView.DisplayControl.Value);
+            mainView.WaitFor(ReviewInterval - interval - 1);
+            Assert.AreEqual<string>("00:10:01", mainView.DisplayControl.Value);
+            mainView.WaitFor(1);
+            Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
+            mainView.StartAction.Execute();
+            Assert.AreEqual<string>("00:10:00", mainView.DisplayControl.Value);
+            interval = 2;
+            mainView.WaitFor(interval);
+            Assert.AreEqual<string>("00:09:58", mainView.DisplayControl.Value);
+            mainView.WaitFor(WorkInterval - interval - 1);
+            Assert.AreEqual<string>("00:00:01", mainView.DisplayControl.Value);
+            mainView.WaitFor(1);
+            Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
+            mainView.Invalidate();
+        }
     }
 }
