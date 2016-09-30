@@ -81,5 +81,26 @@ namespace HangBreaker.Tests {
             Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
             mainView.Invalidate();
         }
+
+        [TestMethod]
+        public void OpacityTest() {
+            var mainView = new TestMainView();
+            mainView.StartAction.Execute();
+            mainView.WaitFor(ReviewInterval);
+            Assert.IsTrue(mainView.OpacityControl.Value);
+            mainView.WaitFor(1);
+            Assert.IsFalse(mainView.OpacityControl.Value);
+            mainView.WaitFor(273);
+            Assert.IsTrue(mainView.OpacityControl.Value);
+            mainView.WaitFor(284);
+            Assert.IsTrue(mainView.OpacityControl.Value);
+            mainView.WaitFor(WorkInterval);
+            Assert.IsTrue(mainView.OpacityControl.Value);
+            mainView.WaitFor(109);
+            Assert.IsFalse(mainView.OpacityControl.Value);
+            mainView.WaitFor(213);
+            Assert.IsTrue(mainView.OpacityControl.Value);
+            mainView.Invalidate();
+        }
     }
 }

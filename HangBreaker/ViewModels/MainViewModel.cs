@@ -12,6 +12,7 @@ namespace HangBreaker.ViewModels {
         }
 
         public virtual string DisplayText { get; protected set; }
+        public virtual bool IsTransparent { get; set; }
 
         public bool CanStart() {
             return State == ViewModelState.Initial || State == ViewModelState.PreviewOverflow;
@@ -20,10 +21,6 @@ namespace HangBreaker.ViewModels {
         public bool CanRestart() {
             return State == ViewModelState.Preview || State == ViewModelState.PreviewOverflow || 
                 State == ViewModelState.Work || State == ViewModelState.WorkOverflow;
-        }
-
-        public bool CanTick() {
-            return State == ViewModelState.Preview || State == ViewModelState.Work;
         }
 
         public void Start() {
@@ -42,7 +39,6 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Tick() {
-            if (!(State == ViewModelState.Preview || State == ViewModelState.Work)) return;
             if (--Elapsed > 0) UpdateDisplayText();
             else {
                 switch (State) {
@@ -51,6 +47,10 @@ namespace HangBreaker.ViewModels {
                         break;
                     case ViewModelState.Work:
                         UpdateState(ViewModelState.WorkOverflow);
+                        break;
+                    case ViewModelState.PreviewOverflow:
+                    case ViewModelState.WorkOverflow:
+                        IsTransparent = !IsTransparent;
                         break;
                 }
             }
@@ -64,9 +64,11 @@ namespace HangBreaker.ViewModels {
             switch (State) {
                 case ViewModelState.Preview:
                     Elapsed = 5 * 60;
+                    IsTransparent = true;
                     break;
                 case ViewModelState.Work:
                     Elapsed = 10 * 60;
+                    IsTransparent = true;
                     break;
             }
             UpdateDisplayText();
