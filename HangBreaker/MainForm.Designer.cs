@@ -26,19 +26,23 @@
             this.components = new System.ComponentModel.Container();
             DevExpress.Utils.MVVM.MVVMContext MvvmContext;
             System.Windows.Forms.Label LabelDisplay;
-            System.Windows.Forms.Button ButtonStart;
-            System.Windows.Forms.Button ButtonRestart;
+            HangBreaker.Controls.Button ButtonStart;
+            HangBreaker.Controls.Button ButtonRestart;
             System.Windows.Forms.Button ButtonExit;
             MvvmContext = new DevExpress.Utils.MVVM.MVVMContext(this.components);
             LabelDisplay = new System.Windows.Forms.Label();
-            ButtonStart = new System.Windows.Forms.Button();
-            ButtonRestart = new System.Windows.Forms.Button();
+            ButtonStart = new HangBreaker.Controls.Button();
+            ButtonRestart = new HangBreaker.Controls.Button();
             ButtonExit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(MvvmContext)).BeginInit();
             this.SuspendLayout();
             // 
             // MvvmContext
             // 
+            MvvmContext.BindingExpressions.AddRange(new DevExpress.Utils.MVVM.BindingExpression[] {
+            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Restart", ButtonRestart),
+            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Start", ButtonStart),
+            DevExpress.Utils.MVVM.BindingExpression.CreatePropertyBinding(typeof(HangBreaker.ViewModels.MainViewModel), "DisplayText", LabelDisplay, "Text")});
             MvvmContext.ContainerControl = this;
             MvvmContext.ViewModelType = typeof(HangBreaker.ViewModels.MainViewModel);
             // 
