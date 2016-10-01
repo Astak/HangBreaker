@@ -24,29 +24,87 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            this.mvvmContext1 = new DevExpress.Utils.MVVM.MVVMContext(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
+            DevExpress.Utils.MVVM.MVVMContext MvvmContext;
+            System.Windows.Forms.Label LabelDisplay;
+            System.Windows.Forms.Button ButtonStart;
+            System.Windows.Forms.Button ButtonRestart;
+            System.Windows.Forms.Button ButtonExit;
+            MvvmContext = new DevExpress.Utils.MVVM.MVVMContext(this.components);
+            LabelDisplay = new System.Windows.Forms.Label();
+            ButtonStart = new System.Windows.Forms.Button();
+            ButtonRestart = new System.Windows.Forms.Button();
+            ButtonExit = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(MvvmContext)).BeginInit();
             this.SuspendLayout();
             // 
-            // mvvmContext1
+            // MvvmContext
             // 
-            this.mvvmContext1.ContainerControl = this;
+            MvvmContext.ContainerControl = this;
+            MvvmContext.ViewModelType = typeof(HangBreaker.ViewModels.MainViewModel);
+            // 
+            // LabelDisplay
+            // 
+            LabelDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            LabelDisplay.Font = new System.Drawing.Font("Comic Sans MS", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            LabelDisplay.ForeColor = System.Drawing.Color.Red;
+            LabelDisplay.Location = new System.Drawing.Point(0, 0);
+            LabelDisplay.Name = "LabelDisplay";
+            LabelDisplay.Size = new System.Drawing.Size(500, 140);
+            LabelDisplay.TabIndex = 0;
+            LabelDisplay.Text = "Overtime";
+            LabelDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ButtonStart
+            // 
+            ButtonStart.Location = new System.Drawing.Point(12, 96);
+            ButtonStart.Name = "ButtonStart";
+            ButtonStart.Size = new System.Drawing.Size(32, 32);
+            ButtonStart.TabIndex = 1;
+            ButtonStart.UseVisualStyleBackColor = true;
+            ButtonStart.Visible = false;
+            // 
+            // ButtonRestart
+            // 
+            ButtonRestart.Location = new System.Drawing.Point(50, 96);
+            ButtonRestart.Name = "ButtonRestart";
+            ButtonRestart.Size = new System.Drawing.Size(32, 32);
+            ButtonRestart.TabIndex = 2;
+            ButtonRestart.UseVisualStyleBackColor = true;
+            ButtonRestart.Visible = false;
+            // 
+            // ButtonExit
+            // 
+            ButtonExit.Location = new System.Drawing.Point(456, 12);
+            ButtonExit.Name = "ButtonExit";
+            ButtonExit.Size = new System.Drawing.Size(32, 32);
+            ButtonExit.TabIndex = 3;
+            ButtonExit.UseVisualStyleBackColor = true;
+            ButtonExit.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.BackColor = System.Drawing.Color.AntiqueWhite;
+            this.ClientSize = new System.Drawing.Size(500, 140);
+            this.Controls.Add(ButtonExit);
+            this.Controls.Add(ButtonRestart);
+            this.Controls.Add(ButtonStart);
+            this.Controls.Add(LabelDisplay);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
+            this.TopMost = true;
+            ((System.ComponentModel.ISupportInitialize)(MvvmContext)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private DevExpress.Utils.MVVM.MVVMContext mvvmContext1;
+
     }
 }
 
