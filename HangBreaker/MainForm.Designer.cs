@@ -25,15 +25,12 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label LabelDisplay;
-            System.Windows.Forms.Button ButtonExit;
-            HangBreaker.Controls.Button ButtonRestart;
-            HangBreaker.Controls.Button ButtonStart;
             HangBreaker.Controls.Timer Timer;
+            this.ButtonExit = new System.Windows.Forms.Button();
+            this.ButtonRestart = new HangBreaker.Controls.Button();
+            this.ButtonStart = new HangBreaker.Controls.Button();
             this.MvvmContext = new DevExpress.Utils.MVVM.MVVMContext(this.components);
             LabelDisplay = new System.Windows.Forms.Label();
-            ButtonExit = new System.Windows.Forms.Button();
-            ButtonRestart = new HangBreaker.Controls.Button();
-            ButtonStart = new HangBreaker.Controls.Button();
             Timer = new HangBreaker.Controls.Timer();
             ((System.ComponentModel.ISupportInitialize)(this.MvvmContext)).BeginInit();
             this.SuspendLayout();
@@ -49,39 +46,41 @@
             LabelDisplay.TabIndex = 0;
             LabelDisplay.Text = "Overtime";
             LabelDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            LabelDisplay.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelDisplay_MouseMove);
             // 
             // ButtonExit
             // 
-            ButtonExit.Location = new System.Drawing.Point(275, 12);
-            ButtonExit.Name = "ButtonExit";
-            ButtonExit.Size = new System.Drawing.Size(32, 32);
-            ButtonExit.TabIndex = 3;
-            ButtonExit.UseVisualStyleBackColor = true;
-            ButtonExit.Visible = false;
+            this.ButtonExit.Location = new System.Drawing.Point(275, 12);
+            this.ButtonExit.Name = "ButtonExit";
+            this.ButtonExit.Size = new System.Drawing.Size(32, 32);
+            this.ButtonExit.TabIndex = 3;
+            this.ButtonExit.UseVisualStyleBackColor = true;
+            this.ButtonExit.Visible = false;
+            this.ButtonExit.Click += new System.EventHandler(this.ButtonExit_Click);
             // 
             // ButtonRestart
             // 
-            ButtonRestart.Location = new System.Drawing.Point(50, 46);
-            ButtonRestart.Name = "ButtonRestart";
-            ButtonRestart.Size = new System.Drawing.Size(32, 32);
-            ButtonRestart.TabIndex = 2;
-            ButtonRestart.UseVisualStyleBackColor = true;
-            ButtonRestart.Visible = false;
+            this.ButtonRestart.Location = new System.Drawing.Point(50, 46);
+            this.ButtonRestart.Name = "ButtonRestart";
+            this.ButtonRestart.Size = new System.Drawing.Size(32, 32);
+            this.ButtonRestart.TabIndex = 2;
+            this.ButtonRestart.UseVisualStyleBackColor = true;
+            this.ButtonRestart.Visible = false;
             // 
             // ButtonStart
             // 
-            ButtonStart.Location = new System.Drawing.Point(12, 46);
-            ButtonStart.Name = "ButtonStart";
-            ButtonStart.Size = new System.Drawing.Size(32, 32);
-            ButtonStart.TabIndex = 1;
-            ButtonStart.UseVisualStyleBackColor = true;
-            ButtonStart.Visible = false;
+            this.ButtonStart.Location = new System.Drawing.Point(12, 46);
+            this.ButtonStart.Name = "ButtonStart";
+            this.ButtonStart.Size = new System.Drawing.Size(32, 32);
+            this.ButtonStart.TabIndex = 1;
+            this.ButtonStart.UseVisualStyleBackColor = true;
+            this.ButtonStart.Visible = false;
             // 
             // MvvmContext
             // 
             this.MvvmContext.BindingExpressions.AddRange(new DevExpress.Utils.MVVM.BindingExpression[] {
-            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Restart", ButtonRestart),
-            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Start", ButtonStart),
+            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Restart", this.ButtonRestart),
+            DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Start", this.ButtonStart),
             DevExpress.Utils.MVVM.BindingExpression.CreatePropertyBinding(typeof(HangBreaker.ViewModels.MainViewModel), "DisplayText", LabelDisplay, "Text"),
             DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Tick", Timer)});
             this.MvvmContext.ContainerControl = this;
@@ -97,9 +96,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AntiqueWhite;
             this.ClientSize = new System.Drawing.Size(319, 90);
-            this.Controls.Add(ButtonExit);
-            this.Controls.Add(ButtonRestart);
-            this.Controls.Add(ButtonStart);
+            this.Controls.Add(this.ButtonExit);
+            this.Controls.Add(this.ButtonRestart);
+            this.Controls.Add(this.ButtonStart);
             this.Controls.Add(LabelDisplay);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
@@ -115,6 +114,9 @@
         #endregion
 
         private DevExpress.Utils.MVVM.MVVMContext MvvmContext;
+        private System.Windows.Forms.Button ButtonExit;
+        private Controls.Button ButtonRestart;
+        private Controls.Button ButtonStart;
 
 
     }

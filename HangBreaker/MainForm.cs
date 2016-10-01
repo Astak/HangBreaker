@@ -1,4 +1,5 @@
 ﻿using HangBreaker.ViewModels;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -25,6 +26,16 @@ namespace HangBreaker {
                 Screen.PrimaryScreen.WorkingArea.Right - Width - 50,
                 50
                 );
+        }
+
+        private void LabelDisplay_MouseMove(object sender, MouseEventArgs e) {
+            ButtonStart.Visible = ButtonStart.Enabled && ButtonStart.Bounds.Contains(e.Location);
+            ButtonRestart.Visible = ButtonRestart.Enabled && ButtonRestart.Bounds.Contains(e.Location);
+            ButtonExit.Visible = ButtonExit.Bounds.Contains(e.Location);
+        }
+
+        private void ButtonExit_Click(object sender, EventArgs e) {
+            Close();
         }
     }
 }
