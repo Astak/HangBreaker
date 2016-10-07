@@ -57,6 +57,7 @@
             this.ButtonExit.UseVisualStyleBackColor = true;
             this.ButtonExit.Visible = false;
             this.ButtonExit.Click += new System.EventHandler(this.ButtonExit_Click);
+            this.ButtonExit.Paint += new System.Windows.Forms.PaintEventHandler(this.ButtonExit_Paint);
             // 
             // ButtonRestart
             // 
@@ -66,6 +67,7 @@
             this.ButtonRestart.TabIndex = 2;
             this.ButtonRestart.UseVisualStyleBackColor = true;
             this.ButtonRestart.Visible = false;
+            this.ButtonRestart.Paint += new System.Windows.Forms.PaintEventHandler(this.ButtonRestart_Paint);
             // 
             // ButtonStart
             // 
@@ -75,6 +77,11 @@
             this.ButtonStart.TabIndex = 1;
             this.ButtonStart.UseVisualStyleBackColor = true;
             this.ButtonStart.Visible = false;
+            this.ButtonStart.Paint += new System.Windows.Forms.PaintEventHandler(this.ButtonStart_Paint);
+            // 
+            // Timer
+            // 
+            Timer.Interval = 1000;
             // 
             // MvvmContext
             // 
@@ -85,10 +92,6 @@
             DevExpress.Utils.MVVM.BindingExpression.CreateCommandBinding(typeof(HangBreaker.ViewModels.MainViewModel), "Tick", Timer)});
             this.MvvmContext.ContainerControl = this;
             this.MvvmContext.ViewModelType = typeof(HangBreaker.ViewModels.MainViewModel);
-            // 
-            // Timer
-            // 
-            Timer.Interval = 1000;
             // 
             // MainForm
             // 
