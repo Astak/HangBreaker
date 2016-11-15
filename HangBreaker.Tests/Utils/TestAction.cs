@@ -2,7 +2,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace HangBreaker.Tests {
+namespace HangBreaker.Tests.Utils {
     public sealed class TestAction :ISupportCommandBinding {
         private Action ExecuteInternal;
 

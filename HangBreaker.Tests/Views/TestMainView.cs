@@ -1,8 +1,9 @@
 ﻿using DevExpress.Utils.MVVM;
+using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace HangBreaker.Tests {
+namespace HangBreaker.Tests.Views {
     public class TestMainView {
         private MVVMContext Context;
 
