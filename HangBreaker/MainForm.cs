@@ -37,8 +37,8 @@ namespace HangBreaker {
 
         private void SetPosition() {
             Location = new Point(
-                Screen.PrimaryScreen.WorkingArea.Right - Width - 50,
-                50
+                Screen.PrimaryScreen.WorkingArea.Right - Width - 20,
+                20
                 );
         }
 
@@ -54,11 +54,18 @@ namespace HangBreaker {
 
         private void ButtonStart_Paint(object sender, PaintEventArgs e) {
             e.Graphics.FillRectangle(Brushes.AntiqueWhite, e.ClipRectangle);
-            var arcBounds = e.ClipRectangle;
-            arcBounds.Inflate(-5, -5);
-            e.Graphics.DrawArc(StartPen, arcBounds, 300, 300);
-            var centerX = e.ClipRectangle.Left + e.ClipRectangle.Width / 2;
-            e.Graphics.DrawLine(StartPen, centerX, e.ClipRectangle.Top, centerX, e.ClipRectangle.Top + e.ClipRectangle.Height / 2);
+            double r = e.ClipRectangle.Width / 2.0;
+            int x = Convert.ToInt32(Math.Round(e.ClipRectangle.Left + r - r * Math.Sin(Math.PI / 3)));
+            double h = 3 * r / Math.Sqrt(3) / 2.0;
+            double ox = e.ClipRectangle.Top + r;
+            int y1 = Convert.ToInt32(Math.Round(ox - h));
+            int y2 = Convert.ToInt32(Math.Round(ox + h));
+            var points = new Point[] {
+                new Point(x, y1),
+                new Point(e.ClipRectangle.Right, Convert.ToInt32(Math.Round(ox))),
+                new Point(x, y2)
+            };
+            e.Graphics.FillPolygon(Brushes.Aqua, points);
         }
 
         private void ButtonRestart_Paint(object sender, PaintEventArgs e) {
