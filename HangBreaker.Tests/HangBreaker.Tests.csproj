@@ -56,9 +56,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Services\TestXpoService.cs" />
+    <Compile Include="Tests\SetStatusViewModelTests.cs" />
     <Compile Include="Tests\StartSessionViewModelTests.cs" />
     <Compile Include="Tests\MainViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\TestSetStatusView.cs" />
     <Compile Include="Views\TestStartSessionView.cs" />
     <Compile Include="Utils\TestAction.cs" />
     <Compile Include="Utils\TestControl.cs" />
