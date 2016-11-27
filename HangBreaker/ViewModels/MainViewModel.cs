@@ -4,56 +4,36 @@ using System.Globalization;
 
 namespace HangBreaker.ViewModels {
     public class MainViewModel {
-        private ViewModelState State;
+        private IViewModelState State;
         private int Elapsed;
 
         public MainViewModel() {
             DisplayText = "Hello";
+            State = new InitialViewModelState(this);
         }
 
         public virtual string DisplayText { get; protected set; }
         public virtual bool IsTransparent { get; set; }
 
         public bool CanStart() {
-            return State == ViewModelState.Initial || State == ViewModelState.PreviewOverflow;
+            return State.CanStart;
         }
 
         public bool CanRestart() {
-            return State == ViewModelState.Preview || State == ViewModelState.PreviewOverflow || 
-                State == ViewModelState.Work || State == ViewModelState.WorkOverflow;
+            return State.CanRestart;
         }
 
         public void Start() {
-            switch (State) {
-                case ViewModelState.Initial:
-                    UpdateState(ViewModelState.Preview);
-                    break;
-                case ViewModelState.PreviewOverflow:
-                    UpdateState(ViewModelState.Work);
-                    break;
-            }
+            State.Start();
         }
 
         public void Restart() {
-            UpdateState(ViewModelState.Preview);
+            UpdateState(new PreviewViewModelState(this));
         }
 
         public void Tick() {
             if (--Elapsed > 0) UpdateDisplayText();
-            else {
-                switch (State) {
-                    case ViewModelState.Preview:
-                        UpdateState(ViewModelState.PreviewOverflow);
-                        break;
-                    case ViewModelState.Work:
-                        UpdateState(ViewModelState.WorkOverflow);
-                        break;
-                    case ViewModelState.PreviewOverflow:
-                    case ViewModelState.WorkOverflow:
-                        IsTransparent = !IsTransparent;
-                        break;
-                }
-            }
+            else State.OnElapsed();
         }
 
         private void UpdateState(ViewModelState state) {
@@ -61,37 +41,188 @@ namespace HangBreaker.ViewModels {
             this.RaiseCanExecuteChanged(vm => vm.Start());
             this.RaiseCanExecuteChanged(vm => vm.Restart());
             this.RaiseCanExecuteChanged(vm => vm.Tick());
-            switch (State) {
-                case ViewModelState.Preview:
-                    Elapsed = 5 * 60;
-                    IsTransparent = true;
-                    break;
-                case ViewModelState.Work:
-                    Elapsed = 10 * 60;
-                    IsTransparent = true;
-                    break;
-            }
+            State.Update();
             UpdateDisplayText();
         }
 
         private void UpdateDisplayText() {
-            switch (State) {
-                case ViewModelState.Initial:
-                    DisplayText = "Hello";
-                    break;
-                case ViewModelState.Preview:
-                    DisplayText = string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(10 * 60 + Elapsed));
-                    break;
-                case ViewModelState.Work:
-                    DisplayText = string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(Elapsed));
-                    break;
-                case ViewModelState.PreviewOverflow:
-                case ViewModelState.WorkOverflow:
-                    DisplayText = "Overtime";
-                    break;
+            DisplayText = State.DisplayText;
+        }
+
+        private interface IViewModelState {
+            bool CanStart { get; }
+            bool CanRestart { get; }
+            string DisplayText { get; }
+            void Start();
+            void OnElapsed();
+            void Update();
+        }
+
+        private abstract class ViewModelState : IViewModelState {
+            protected MainViewModel ViewModel;
+
+            public ViewModelState(MainViewModel viewModel) {
+                this.ViewModel = viewModel;
+            }
+
+            protected abstract bool CanStart { get; }
+            protected abstract bool CanRestart { get; }
+            protected abstract string DisplayText { get; }
+            protected abstract void Start();
+            protected abstract void OnElapsed();
+            protected abstract void Update();
+
+            bool IViewModelState.CanStart {
+                get { return CanStart; }
+            }
+
+            bool IViewModelState.CanRestart {
+                get { return CanRestart; }
+            }
+
+            string IViewModelState.DisplayText {
+                get { return DisplayText; }
+            }
+
+            void IViewModelState.Start() {
+                Start();
+            }
+
+            void IViewModelState.OnElapsed() {
+                OnElapsed();
+            }
+
+            void IViewModelState.Update() {
+                Update();
             }
         }
 
-        private enum ViewModelState { Initial, Preview, PreviewOverflow, Work, WorkOverflow }
+        private class InitialViewModelState : ViewModelState {
+            public InitialViewModelState(MainViewModel viewModel) : base(viewModel) { }
+
+            protected override bool CanStart {
+                get { return true; }
+            }
+
+            protected override bool CanRestart {
+                get { return false; }
+            }
+
+            protected override string DisplayText {
+                get { return "Hello"; }
+            }
+
+            protected override void Start() {
+                ViewModel.UpdateState(new PreviewViewModelState(ViewModel));
+            }
+
+            protected override void OnElapsed() { }
+
+            protected override void Update() { }
+        }
+
+        private class PreviewViewModelState : ViewModelState {
+            public PreviewViewModelState(MainViewModel viewModel) : base(viewModel) { }
+
+            protected override bool CanStart {
+                get { return false; }
+            }
+
+            protected override bool CanRestart {
+                get { return true; }
+            }
+
+            protected override string DisplayText {
+                get { return string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(10 * 60 + ViewModel.Elapsed)); }
+            }
+
+            protected override void Start() { }
+
+            protected override void OnElapsed() {
+                ViewModel.UpdateState(new PreviewOverflowViewModelState(ViewModel));
+            }
+
+            protected override void Update() {
+                ViewModel.Elapsed = 5 * 60;
+                ViewModel.IsTransparent = true;
+            }
+        }
+
+        private class PreviewOverflowViewModelState : ViewModelState {
+            public PreviewOverflowViewModelState(MainViewModel viewModel) : base(viewModel) { }
+
+            protected override bool CanStart {
+                get { return true; }
+            }
+
+            protected override bool CanRestart {
+                get { return true; }
+            }
+
+            protected override string DisplayText {
+                get { return "Overtime"; }
+            }
+
+            protected override void Start() {
+                ViewModel.UpdateState(new WorkViewModelState(ViewModel));
+            }
+
+            protected override void OnElapsed() {
+                ViewModel.IsTransparent = !ViewModel.IsTransparent;
+            }
+
+            protected override void Update() { }
+        }
+
+        private class WorkViewModelState : ViewModelState {
+            public WorkViewModelState(MainViewModel viewModel) : base(viewModel) { }
+
+            protected override bool CanStart {
+                get { return false; }
+            }
+
+            protected override bool CanRestart {
+                get { return true; }
+            }
+
+            protected override string DisplayText {
+                get { return string.Format(CultureInfo.CurrentCulture, "{0}", TimeSpan.FromSeconds(ViewModel.Elapsed)); }
+            }
+
+            protected override void Start() { }
+
+            protected override void OnElapsed() {
+                ViewModel.UpdateState(new WorkOverflowViewModelState(ViewModel));
+            }
+
+            protected override void Update() {
+                ViewModel.Elapsed = 10 * 60;
+                ViewModel.IsTransparent = true;
+            }
+        }
+
+        private class WorkOverflowViewModelState : ViewModelState {
+            public WorkOverflowViewModelState(MainViewModel viewModel) : base(viewModel) { }
+
+            protected override bool CanStart {
+                get { return false; }
+            }
+
+            protected override bool CanRestart {
+                get { return true; }
+            }
+
+            protected override string DisplayText {
+                get { return "Overtime"; }
+            }
+
+            protected override void Start() { }
+
+            protected override void OnElapsed() {
+                ViewModel.IsTransparent = !ViewModel.IsTransparent;
+            }
+
+            protected override void Update() { }
+        }
     }
 }
