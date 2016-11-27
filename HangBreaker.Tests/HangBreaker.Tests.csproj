@@ -59,7 +59,7 @@
     <Compile Include="Tests\StartSessionViewModelTests.cs" />
     <Compile Include="Tests\MainViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\TestStartSessionView.cs" />
+    <Compile Include="Views\TestStartSessionView.cs" />
     <Compile Include="Utils\TestAction.cs" />
     <Compile Include="Utils\TestControl.cs" />
     <Compile Include="Views\TestMainView.cs" />

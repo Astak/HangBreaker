@@ -1,13 +1,21 @@
-﻿using DevExpress.Xpo;
+﻿using DevExpress.Mvvm;
+using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
 using HangBreaker.BusinessModel;
-using HangBreaker.Tests.Tests;
+using HangBreaker.Services;
+using HangBreaker.Tests.Services;
+using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace HangBreaker.Tests {
     [TestClass]
     public class StartSessionViewModelTests {
+        [AssemblyInitialize]
+        public static void AssemblyInit(TestContext context) {
+            ServiceContainer.Default.RegisterService(new TestXpoService());
+        }
+
         [TestMethod]
         public void CannotSaveIfTicketIDIsNotSpecified() {
             var view = new TestStartSessionView();
@@ -23,9 +31,8 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void StartSessionAddsNewRectordToSessionTable() {
-            var prov = new InMemoryDataStore();
-            var dal = new SimpleDataLayer(prov);
-            var session = new Session(dal);
+            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
+            Session session = xpoService.GetSession();
             var view = new TestStartSessionView();
             view.TicketIDControl.Value = "T123456";
             view.StartAction.Execute();

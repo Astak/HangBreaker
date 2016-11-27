@@ -2,7 +2,7 @@
 using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 
-namespace HangBreaker.Tests.Tests {
+namespace HangBreaker.Tests.Views {
     public class TestStartSessionView {
         private readonly MVVMContext Context;
         public readonly TestAction StartAction;
