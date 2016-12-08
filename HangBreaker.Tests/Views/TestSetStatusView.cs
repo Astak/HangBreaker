@@ -9,9 +9,11 @@ namespace HangBreaker.Tests.Views {
         public readonly TestAction OKAction;
         public readonly TestControl<WorkSessionStatus?> StatusControl;
 
-        public TestSetStatusView() {
+        public TestSetStatusView(int workSessionId, bool isFinal) {
             Context = new MVVMContext();
+            var parameters = new SetStatusViewModelParameters(workSessionId, isFinal);
             Context.ViewModelType = typeof(SetStatusViewModel);
+            MVVMContext.SetParameter(Context, parameters);
             OKAction = new TestAction();
             StatusControl = new TestControl<WorkSessionStatus?>();
             var api = Context.OfType<SetStatusViewModel>();
