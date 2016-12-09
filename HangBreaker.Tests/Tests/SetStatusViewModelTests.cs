@@ -2,12 +2,19 @@
 using DevExpress.Xpo;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
+using HangBreaker.Tests.Services;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HangBreaker.Tests {
     [TestClass]
     public class SetStatusViewModelTests {
+        [TestCleanup]
+        public void Cleanup() {
+            var xpoService = (TestXpoService)ServiceContainer.Default.GetService<IXpoService>();
+            xpoService.Cleanup();
+        }
+
         [TestMethod]
         public void CannotSaveIfStatusIsNotSpecifiedTest() {
             var workSession = CreateTestWorkSession();

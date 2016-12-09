@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
 using HangBreaker.Services;
+using System;
 
 namespace HangBreaker.Tests.Services {
     public sealed class TestXpoService :IXpoService {
@@ -22,6 +23,10 @@ namespace HangBreaker.Tests.Services {
             XpoDefault.Session = null;
             var prov = new InMemoryDataStore();
             return new SimpleDataLayer(prov);
+        }
+
+        public void Cleanup() {
+            ((SimpleDataLayer)DataLayer).ClearDatabase();
         }
 
         Session IXpoService.GetSession() {

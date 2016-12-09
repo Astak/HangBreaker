@@ -16,6 +16,12 @@ namespace HangBreaker.Tests {
             ServiceContainer.Default.RegisterService(new TestXpoService());
         }
 
+        [TestCleanup]
+        public void Cleanup() {
+            var xpoService = (TestXpoService)ServiceContainer.Default.GetService<IXpoService>();
+            xpoService.Cleanup();
+        }
+
         [TestMethod]
         public void CannotSaveIfTicketIDIsNotSpecified() {
             var view = new TestStartSessionView();
