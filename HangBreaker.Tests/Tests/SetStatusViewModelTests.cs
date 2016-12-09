@@ -10,20 +10,14 @@ namespace HangBreaker.Tests {
     public class SetStatusViewModelTests {
         [TestMethod]
         public void CannotSaveIfStatusIsNotSpecifiedTest() {
-            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            UnitOfWork uow = xpoService.GetUnitOfWork();
-            var workSession = new WorkSession(uow);
-            uow.CommitChanges();
+            var workSession = CreateTestWorkSession();
             var view = new TestSetStatusView(workSession.Oid, false);
             Assert.IsFalse(view.OKAction.Enabled);
         }
 
         [TestMethod]
         public void CanSaveIfStatusIsSpecifiedTest() {
-            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            UnitOfWork uow = xpoService.GetUnitOfWork();
-            var workSession = new WorkSession(uow);
-            uow.CommitChanges();
+            var workSession = CreateTestWorkSession();
             var view = new TestSetStatusView(workSession.Oid, false);
             view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
             Assert.IsTrue(view.OKAction.Enabled);
@@ -31,15 +25,20 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void SetStatusUpdatesExistingRecordInSessionTableTest() {
+            var workSession = CreateTestWorkSession();
+            var view = new TestSetStatusView(workSession.Oid, false);
+            view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
+            view.OKAction.Execute();
+            workSession.Reload();
+            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.IntermediateStatus);
+        }
+
+        private static WorkSession CreateTestWorkSession() {
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
             UnitOfWork uow = xpoService.GetUnitOfWork();
             var workSession = new WorkSession(uow);
             uow.CommitChanges();
-            var view = new TestSetStatusView(workSession.Oid, false);
-            view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
-            view.OKAction.Execute();
-            uow.Reload(workSession);
-            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.IntermediateStatus);
+            return workSession;
         }
     }
 }
