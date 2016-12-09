@@ -33,6 +33,16 @@ namespace HangBreaker.Tests {
             Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.IntermediateStatus);
         }
 
+        [TestMethod]
+        public void SetFinalStatusUpdatesExistingRecordInSessionTableTest() {
+            var workSession = CreateTestWorkSession();
+            var view = new TestSetStatusView(workSession.Oid, true);
+            view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
+            view.OKAction.Execute();
+            workSession.Reload();
+            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.FinalStatus);
+        }
+
         private static WorkSession CreateTestWorkSession() {
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
             UnitOfWork uow = xpoService.GetUnitOfWork();
