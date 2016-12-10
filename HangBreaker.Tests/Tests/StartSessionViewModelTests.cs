@@ -4,6 +4,7 @@ using DevExpress.Xpo.DB;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
 using HangBreaker.Tests.Services;
+using HangBreaker.Tests.Services.Documents;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -15,6 +16,17 @@ namespace HangBreaker.Tests {
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context) {
             ServiceContainer.Default.RegisterService(new TestXpoService());
+            ServiceContainer.Default.RegisterService(new TestDocumentManagerService());
+            IViewService viewService = new TestViewService();
+            viewService.AddResolver(vt => {
+                switch (vt) {
+                    case "Main": return new TestMainView();
+                    case "SetStatus": return new TestSetStatusView();
+                    case "StartSession": return new TestStartSessionView();
+                    default: return null;
+                }
+            });
+            ServiceContainer.Default.RegisterService(viewService);
         }
 
         [TestCleanup]

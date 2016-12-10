@@ -18,14 +18,16 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void CannotSaveIfStatusIsNotSpecifiedTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid);
+            var view = new TestSetStatusView();
+            view.SetParameter(workSession.Oid);
             Assert.IsFalse(view.OKAction.Enabled);
         }
 
         [TestMethod]
         public void CanSaveIfStatusIsSpecifiedTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid);
+            var view = new TestSetStatusView();
+            view.SetParameter(workSession.Oid);
             view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
             Assert.IsTrue(view.OKAction.Enabled);
         }
@@ -33,7 +35,8 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void SetStatusUpdatesExistingRecordInSessionTableTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid);
+            var view = new TestSetStatusView();
+            view.SetParameter(workSession.Oid);
             view.StatusControl.Value = WorkSessionStatus.NeedExample;
             view.OKAction.Execute();
             workSession.Reload();

@@ -4,15 +4,12 @@ using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
-    public class TestSetStatusView {
-        private readonly MVVMContext Context;
+    public class TestSetStatusView :TestBaseView {
         public readonly TestAction OKAction;
         public readonly TestControl<WorkSessionStatus?> StatusControl;
 
-        public TestSetStatusView(int workSessionId) {
-            Context = new MVVMContext();
+        public TestSetStatusView() {
             Context.ViewModelType = typeof(SetStatusViewModel);
-            MVVMContext.SetParameter(Context, workSessionId);
             OKAction = new TestAction();
             StatusControl = new TestControl<WorkSessionStatus?>();
             var api = Context.OfType<SetStatusViewModel>();

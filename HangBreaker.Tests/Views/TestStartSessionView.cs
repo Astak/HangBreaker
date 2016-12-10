@@ -1,15 +1,13 @@
-﻿using DevExpress.Utils.MVVM;
+﻿    using DevExpress.Utils.MVVM;
 using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
-    public class TestStartSessionView {
-        private readonly MVVMContext Context;
+    public class TestStartSessionView :TestBaseView {
         public readonly TestAction StartAction;
         public readonly TestControl<string> TicketIDControl;
 
         public TestStartSessionView() {
-            Context = new MVVMContext();
             Context.ViewModelType = typeof(StartSessionViewModel);
             StartAction = new TestAction();
             TicketIDControl = new TestControl<string>();
