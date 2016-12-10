@@ -19,6 +19,16 @@ namespace HangBreaker.BusinessModel {
             get { return GetPropertyValue<TimeSpan>("Duration"); }
             set { SetPropertyValue<TimeSpan>("Duration", value); }
         }
+
+        public DateTime StartTime {
+            get { return GetPropertyValue<DateTime>("StartTime"); }
+            set { SetPropertyValue<DateTime>("StartTime", value); }
+        }
+
+        public override void AfterConstruction() {
+            base.AfterConstruction();
+            StartTime = DateTime.Now;
+        }
     }
 
     public enum WorkSessionStatus { NeedAnswer, NeedExample, NeedToDiscuss, Complete }
