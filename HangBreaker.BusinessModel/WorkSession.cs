@@ -10,14 +10,9 @@ namespace HangBreaker.BusinessModel {
             set { SetPropertyValue<string>("TicketID", value); }
         }
 
-        public WorkSessionStatus IntermediateStatus {
-            get { return GetPropertyValue<WorkSessionStatus>("IntermediateStatus"); }
-            set { SetPropertyValue<WorkSessionStatus>("IntermediateStatus", value); }
-        }
-
-        public WorkSessionStatus FinalStatus {
-            get { return GetPropertyValue<WorkSessionStatus>("FinalStatus"); }
-            set { SetPropertyValue<WorkSessionStatus>("FinalStatus", value); }
+        public WorkSessionStatus? Status {
+            get { return GetPropertyValue<WorkSessionStatus?>("Status"); }
+            set { SetPropertyValue<WorkSessionStatus?>("Status", value); }
         }
 
         public TimeSpan Duration {
@@ -26,5 +21,5 @@ namespace HangBreaker.BusinessModel {
         }
     }
 
-    public enum WorkSessionStatus { NeedAnswer, NeedExample, NeedToDiscuss }
+    public enum WorkSessionStatus { NeedAnswer, NeedExample, NeedToDiscuss, Complete }
 }

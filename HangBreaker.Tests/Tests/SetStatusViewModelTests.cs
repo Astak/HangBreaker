@@ -18,14 +18,14 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void CannotSaveIfStatusIsNotSpecifiedTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid, false);
+            var view = new TestSetStatusView(workSession.Oid);
             Assert.IsFalse(view.OKAction.Enabled);
         }
 
         [TestMethod]
         public void CanSaveIfStatusIsSpecifiedTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid, false);
+            var view = new TestSetStatusView(workSession.Oid);
             view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
             Assert.IsTrue(view.OKAction.Enabled);
         }
@@ -33,21 +33,11 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void SetStatusUpdatesExistingRecordInSessionTableTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid, false);
-            view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
+            var view = new TestSetStatusView(workSession.Oid);
+            view.StatusControl.Value = WorkSessionStatus.NeedExample;
             view.OKAction.Execute();
             workSession.Reload();
-            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.IntermediateStatus);
-        }
-
-        [TestMethod]
-        public void SetFinalStatusUpdatesExistingRecordInSessionTableTest() {
-            var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView(workSession.Oid, true);
-            view.StatusControl.Value = WorkSessionStatus.NeedAnswer;
-            view.OKAction.Execute();
-            workSession.Reload();
-            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedAnswer, workSession.FinalStatus);
+            Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedExample, workSession.Status.Value);
         }
 
         private static WorkSession CreateTestWorkSession() {
