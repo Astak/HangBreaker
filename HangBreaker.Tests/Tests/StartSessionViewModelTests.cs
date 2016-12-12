@@ -16,7 +16,7 @@ namespace HangBreaker.Tests {
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context) {
             ServiceContainer.Default.RegisterService(new TestXpoService());
-            ServiceContainer.Default.RegisterService(new TestDocumentManagerService());
+            ServiceContainer.Default.RegisterService(Constants.DocumentManagerServiceKey, new TestDocumentManagerService());
             IViewService viewService = new TestViewService();
             viewService.AddResolver(vt => {
                 switch (vt) {
