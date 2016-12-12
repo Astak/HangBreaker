@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace HangBreaker.Tests.Services.Documents {
     public sealed class TestDocumentManagerService :IDocumentManagerService {
-        private IDocument fActiveDocument;
+        private TestDocument fActiveDocument;
         private ActiveDocumentChangedEventHandler fActiveDocumentChanged;
-        private IList<IDocument> fDocuments = new List<IDocument>();
+        private IList<TestDocument> fDocuments = new List<TestDocument>();
 
         private void RaiseActiveDocumentChanged(IDocument oldDocument) {
             if (fActiveDocumentChanged == null) return;
@@ -15,14 +15,14 @@ namespace HangBreaker.Tests.Services.Documents {
             fActiveDocumentChanged(this, args);
         }
 
-        private void SetActiveDocument(IDocument document) {
+        private void SetActiveDocument(TestDocument document) {
             if (fActiveDocument == document) return;
             IDocument oldDocument = fActiveDocument;
             fActiveDocument = document;
             RaiseActiveDocumentChanged(oldDocument);
         }
 
-        public void CloseDocument(IDocument document) {
+        public void CloseDocument(TestDocument document) {
             fDocuments.Remove(document);
             if (fActiveDocument == document)
                 SetActiveDocument(fDocuments.FirstOrDefault());
@@ -35,10 +35,15 @@ namespace HangBreaker.Tests.Services.Documents {
         public void ShowDocument(IDocument document) {
             SetActiveDocument(fDocuments.FirstOrDefault(d => d == document));
         }
+
+        public void DoAction(string actionName) {
+            if (fActiveDocument == null) throw new System.InvalidOperationException("No active document");
+            fActiveDocument.DoAction(actionName);
+        }
         #region IDocumentManagerService
         IDocument IDocumentManagerService.ActiveDocument {
             get { return fActiveDocument; }
-            set { SetActiveDocument(value); }
+            set { SetActiveDocument((TestDocument)value); }
         }
 
         event ActiveDocumentChangedEventHandler IDocumentManagerService.ActiveDocumentChanged {
@@ -60,10 +65,6 @@ namespace HangBreaker.Tests.Services.Documents {
             get { return fDocuments; }
         }
         #endregion
-
-        internal void DoAction(string p) {
-            throw new System.NotImplementedException();
-        }
 
         internal void SetEditorValue(string p1, string p2) {
             throw new System.NotImplementedException();

@@ -9,6 +9,10 @@ namespace HangBreaker.Tests.Services.Documents {
         public TestDocument(TestBaseView content) {
             fContent = content;
         }
+
+        public void DoAction(string actionName) {
+            fContent.DoAction(actionName);
+        }
         #region IDocument
         void IDocument.Close(bool force) {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);
