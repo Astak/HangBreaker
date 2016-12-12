@@ -1,10 +1,10 @@
 ﻿using DevExpress.Mvvm;
 using DevExpress.Xpo;
-using DevExpress.Xpo.DB;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
 using HangBreaker.Tests.Services;
 using HangBreaker.Tests.Services.Documents;
+using HangBreaker.Tests.Utils;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -20,9 +20,9 @@ namespace HangBreaker.Tests {
             IViewService viewService = new TestViewService();
             viewService.AddResolver(vt => {
                 switch (vt) {
-                    case "Main": return new TestMainView();
-                    case "SetStatus": return new TestSetStatusView();
-                    case "StartSession": return new TestStartSessionView();
+                    case Constants.MainViewName: return new TestMainView();
+                    case Constants.SetStatusViewName: return new TestSetStatusView();
+                    case Constants.StartSessionViewName: return new TestStartSessionView();
                     default: return null;
                 }
             });

@@ -29,6 +29,8 @@ namespace HangBreaker.BusinessModel {
             base.AfterConstruction();
             StartTime = DateTime.Now;
         }
+
+        public WorkSessionStatus? EndTime { get; set; }
     }
 
     public enum WorkSessionStatus { NeedAnswer, NeedExample, NeedToDiscuss, Complete }

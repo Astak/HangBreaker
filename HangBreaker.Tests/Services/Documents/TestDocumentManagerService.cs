@@ -60,5 +60,17 @@ namespace HangBreaker.Tests.Services.Documents {
             get { return fDocuments; }
         }
         #endregion
+
+        internal void DoAction(string p) {
+            throw new System.NotImplementedException();
+        }
+
+        internal void SetEditorValue(string p1, string p2) {
+            throw new System.NotImplementedException();
+        }
+
+        internal void SetEditorValue(string p, BusinessModel.WorkSessionStatus workSessionStatus) {
+            throw new System.NotImplementedException();
+        }
     }
 }

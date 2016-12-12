@@ -1,5 +1,12 @@
-﻿using HangBreaker.Tests.Views;
+﻿using DevExpress.Mvvm;
+using DevExpress.Xpo;
+using HangBreaker.BusinessModel;
+using HangBreaker.Services;
+using HangBreaker.Tests.Services.Documents;
+using HangBreaker.Tests.Utils;
+using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace HangBreaker.Tests {
     [TestClass]
@@ -102,6 +109,25 @@ namespace HangBreaker.Tests {
             mainView.WaitFor(213);
             Assert.IsTrue(mainView.OpacityControl.Value);
             mainView.Invalidate();
+        }
+        
+        [TestMethod]
+        public void RefreshSetsStatusAndEndTime() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>();
+            documentManagerService.CreateDocument(Constants.MainViewName, null, null).Show();
+            documentManagerService.DoAction("Start");
+            documentManagerService.SetEditorValue("TicketID", "T123456");
+            documentManagerService.DoAction("OK");
+            documentManagerService.DoAction("Restart");
+            documentManagerService.SetEditorValue("Status", WorkSessionStatus.NeedAnswer);
+            documentManagerService.DoAction("OK");
+            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
+            Session session = xpoService.GetSession();
+            var workSession = session.Query<WorkSession>()
+                .Select(s => new { s.Status, s.EndTime })
+                .First();
+            Assert.AreEqual(WorkSessionStatus.NeedAnswer, workSession.Status);
+            Assert.IsNotNull(workSession.EndTime);
         }
     }
 }
