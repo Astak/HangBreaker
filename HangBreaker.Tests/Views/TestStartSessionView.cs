@@ -4,6 +4,8 @@ using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
     public class TestStartSessionView :TestBaseView {
+        public const string TicketIDEditorName = "TicketID";
+
         public readonly TestAction StartAction;
         public readonly TestControl<string> TicketIDControl;
 
@@ -14,6 +16,11 @@ namespace HangBreaker.Tests.Views {
             var api = Context.OfType<StartSessionViewModel>();
             api.BindCommand(StartAction, vm => vm.Start());
             api.SetBinding(TicketIDControl, ctrl => ctrl.Value, vm => vm.TicketID);
+            AddEditor(TicketIDEditorName, TicketIDControl);
+        }
+
+        private void AddEditor(string TicketIDEditorName, TestControl<string> TicketIDControl) {
+            throw new System.NotImplementedException();
         }
     }
 }
