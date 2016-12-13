@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HangBreaker.Tests.Views {
     public class TestMainView :TestBaseView {
+        public const string StartActionName = "Start";
         public TestAction StartAction { get; private set; }
         public TestAction RestartAction { get; private set; }
         public TestAction TimerAction { get; private set; }
@@ -14,6 +15,7 @@ namespace HangBreaker.Tests.Views {
         public TestMainView() {
             Context.ViewModelType = typeof(MainViewModel);
             StartAction = new TestAction();
+            AddAction(StartActionName, StartAction);
             RestartAction = new TestAction();
             TimerAction = new TestAction();
             DisplayControl = new TestControl<string>();

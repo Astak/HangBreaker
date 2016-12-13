@@ -115,7 +115,7 @@ namespace HangBreaker.Tests {
         public void RefreshSetsStatusAndEndTime() {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);
             documentManagerService.CreateDocument(Constants.MainViewName, null, null).Show();
-            documentManagerService.DoAction("Start");
+            documentManagerService.DoAction(TestMainView.StartActionName);
             documentManagerService.SetEditorValue("TicketID", "T123456");
             documentManagerService.DoAction("OK");
             documentManagerService.DoAction("Restart");

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace HangBreaker.Tests.Views {
     public class TestBaseView {
         private readonly Dictionary<string, TestAction> Actions = new Dictionary<string, TestAction>();
+        
         public void DoAction(string actionName) {
             TestAction action = null;
             if (Actions.TryGetValue(actionName, out action)) action.Execute();
@@ -12,6 +13,10 @@ namespace HangBreaker.Tests.Views {
                 var msg = string.Format("{0} view does not have {1} action", GetType().Name, actionName);
                 throw new System.InvalidOperationException(msg);
             }
+        }
+
+        protected void AddAction(string name, TestAction action) {
+            Actions.Add(name, action);
         }
 
         private MVVMContext fContext = new MVVMContext();
