@@ -18,9 +18,5 @@ namespace HangBreaker.Tests.Views {
             api.SetBinding(TicketIDControl, ctrl => ctrl.Value, vm => vm.TicketID);
             AddEditor(TicketIDEditorName, TicketIDControl);
         }
-
-        private void AddEditor(string TicketIDEditorName, TestControl<string> TicketIDControl) {
-            throw new System.NotImplementedException();
-        }
     }
 }

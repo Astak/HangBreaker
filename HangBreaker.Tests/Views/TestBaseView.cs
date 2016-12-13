@@ -52,5 +52,9 @@ namespace HangBreaker.Tests.Views {
         protected void AddAction(string name, TestAction action) {
             Actions.Add(name, action);
         }
+
+        protected void AddEditor(string editorName, TestControl<string> editor) {
+            Editors.Add(editorName, editor);
+        }
     }
 }
