@@ -13,6 +13,10 @@ namespace HangBreaker.Tests.Services.Documents {
         public void DoAction(string actionName) {
             fContent.DoAction(actionName);
         }
+
+        public void SetEditorValue(string editorName, string value) {
+            fContent.SetEditorValue(editorName, value);
+        }
         #region IDocument
         void IDocument.Close(bool force) {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);

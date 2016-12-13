@@ -1,23 +1,12 @@
 ﻿using DevExpress.Utils.MVVM;
 using HangBreaker.Tests.Utils;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace HangBreaker.Tests.Views {
     public class TestBaseView {
         private readonly Dictionary<string, TestAction> Actions = new Dictionary<string, TestAction>();
-        
-        public void DoAction(string actionName) {
-            TestAction action = null;
-            if (Actions.TryGetValue(actionName, out action)) action.Execute();
-            else {
-                var msg = string.Format("{0} view does not have {1} action", GetType().Name, actionName);
-                throw new System.InvalidOperationException(msg);
-            }
-        }
-
-        protected void AddAction(string name, TestAction action) {
-            Actions.Add(name, action);
-        }
+        private readonly Dictionary<string, TestControlBase> Editors = new Dictionary<string, TestControlBase>();
 
         private MVVMContext fContext = new MVVMContext();
         protected MVVMContext Context {
@@ -36,6 +25,32 @@ namespace HangBreaker.Tests.Views {
             if (Context == null) return;
             Context.Dispose();
             fContext = null;
+        }
+
+        public void DoAction(string actionName) {
+            TestAction action = null;
+            if (Actions.TryGetValue(actionName, out action)) action.Execute();
+            else {
+                var msg = string.Format(CultureInfo.CurrentUICulture, 
+                    "{0} view does not have {1} action", 
+                    GetType().Name, actionName);
+                throw new System.InvalidOperationException(msg);
+            }
+        }
+
+        public void SetEditorValue(string editorName, string value) {
+            TestControlBase editor = null;
+            if (Editors.TryGetValue(editorName, out editor)) editor.SetValue(value);
+            else {
+                var msg = string.Format(CultureInfo.CurrentUICulture,
+                    "{0} view does not have {1} editor",
+                    GetType().Name, editorName);
+                throw new System.InvalidOperationException(msg);
+            }
+        }
+
+        protected void AddAction(string name, TestAction action) {
+            Actions.Add(name, action);
         }
     }
 }

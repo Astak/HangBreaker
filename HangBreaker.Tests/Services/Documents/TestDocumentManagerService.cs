@@ -37,8 +37,17 @@ namespace HangBreaker.Tests.Services.Documents {
         }
 
         public void DoAction(string actionName) {
-            if (fActiveDocument == null) throw new System.InvalidOperationException("No active document");
+            GuardActiveDocument();
             fActiveDocument.DoAction(actionName);
+        }
+
+        public void SetEditorValue(string editorName, string value) {
+            GuardActiveDocument();
+            fActiveDocument.SetEditorValue(editorName, value);
+        }
+
+        private void GuardActiveDocument() {
+            if (fActiveDocument == null) throw new System.InvalidOperationException("No active document");
         }
         #region IDocumentManagerService
         IDocument IDocumentManagerService.ActiveDocument {
@@ -65,10 +74,6 @@ namespace HangBreaker.Tests.Services.Documents {
             get { return fDocuments; }
         }
         #endregion
-
-        internal void SetEditorValue(string p1, string p2) {
-            throw new System.NotImplementedException();
-        }
 
         internal void SetEditorValue(string p, BusinessModel.WorkSessionStatus workSessionStatus) {
             throw new System.NotImplementedException();
