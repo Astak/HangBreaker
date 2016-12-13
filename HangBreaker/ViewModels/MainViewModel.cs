@@ -1,4 +1,5 @@
-﻿using DevExpress.Mvvm.POCO;
+﻿using DevExpress.Mvvm;
+using DevExpress.Mvvm.POCO;
 using System;
 using System.Globalization;
 
@@ -15,6 +16,10 @@ namespace HangBreaker.ViewModels {
         public virtual string DisplayText { get; protected set; }
         public virtual bool IsTransparent { get; set; }
 
+        protected virtual IDocumentManagerService DocumentManagerService {
+            get { throw new System.NotImplementedException(); }
+        }
+
         public bool CanStart() {
             return State.CanStart;
         }
@@ -24,6 +29,13 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Start() {
+            IDocument document = DocumentManagerService.CreateDocument("StartSession", null, null);
+            document.Show();
+            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChanged;
+        }
+
+        private void OnActiveDocumentChanged(object sender, ActiveDocumentChangedEventArgs e) {
+            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChanged;
             State.Start();
         }
 
