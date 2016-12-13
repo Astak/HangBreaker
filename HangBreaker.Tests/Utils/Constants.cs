@@ -3,6 +3,6 @@
         public const string MainViewName = "Main";
         public const string SetStatusViewName = "SetStatus";
         public const string StartSessionViewName = "StartSession";
-        public const string DocumentManagerServiceKey = "TestDocumentManagerService";
+        public const string DocumentManagerServiceKey = "HangBreaker";
     }
 }

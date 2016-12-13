@@ -16,8 +16,8 @@ namespace HangBreaker.ViewModels {
         public virtual string DisplayText { get; protected set; }
         public virtual bool IsTransparent { get; set; }
 
-        protected virtual IDocumentManagerService DocumentManagerService {
-            get { throw new System.NotImplementedException(); }
+        private IDocumentManagerService DocumentManagerService {
+            get { return ServiceContainer.Default.GetService<IDocumentManagerService>("HangBreaker"); }
         }
 
         public bool CanStart() {
