@@ -14,12 +14,17 @@ namespace HangBreaker.ViewModels {
             get { throw new System.NotImplementedException(); }
         }
 
+        private IDocumentManagerService DocumentManagerService {
+            get { return ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey); }
+        }
+
         public void Ok() {
             UnitOfWork uow = XpoService.GetUnitOfWork();
             var workSession = uow.GetObjectByKey<WorkSession>(SessionId);
             workSession.Status = Status.Value;
             workSession.EndTime = DateTime.Now;
             uow.CommitChanges();
+            DocumentManagerService.ActiveDocument.Close();
         }
 
         public bool CanOk() {

@@ -43,7 +43,7 @@ namespace HangBreaker.ViewModels {
                 uow.CommitChanges();
                 WorkSessionKey = workSession.Oid;
             }
-            IDocument document = DocumentManagerService.CreateDocument("StartSession", WorkSessionKey, null);
+            IDocument document = DocumentManagerService.CreateDocument(Constants.StartSessionViewName, WorkSessionKey, null);
             document.Show();
             DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChanged;
         }
@@ -54,13 +54,25 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Restart() {
-            IDocument document = DocumentManagerService.CreateDocument("SetStatus", WorkSessionKey, null);
+            IDocument document = DocumentManagerService.CreateDocument(Constants.SetStatusViewName, WorkSessionKey, null);
             document.Show();
             DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChangedAfterSetStatus;
         }
 
         private void OnActiveDocumentChangedAfterSetStatus(object sender, ActiveDocumentChangedEventArgs e) {
             DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChangedAfterSetStatus;
+            using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
+                var workSession = new WorkSession(uow);
+                uow.CommitChanges();
+                WorkSessionKey = workSession.Oid;
+            }
+            IDocument document = DocumentManagerService.CreateDocument(Constants.StartSessionViewName, WorkSessionKey, null);
+            document.Show();
+            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChangedAfterStartSession;
+        }
+
+        private void OnActiveDocumentChangedAfterStartSession(object sender, ActiveDocumentChangedEventArgs e) {
+            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChangedAfterStartSession;
             UpdateState(new PreviewViewModelState(this));
         }
 
