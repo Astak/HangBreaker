@@ -38,7 +38,7 @@ namespace HangBreaker.Tests.Views {
             }
         }
 
-        public void SetEditorValue(string editorName, string value) {
+        public void SetEditorValue(string editorName, object value) {
             TestControlBase editor = null;
             if (Editors.TryGetValue(editorName, out editor)) editor.SetValue(value);
             else {

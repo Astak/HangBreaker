@@ -14,7 +14,7 @@ namespace HangBreaker.Tests.Services.Documents {
             fContent.DoAction(actionName);
         }
 
-        public void SetEditorValue(string editorName, string value) {
+        public void SetEditorValue(string editorName, object value) {
             fContent.SetEditorValue(editorName, value);
         }
         #region IDocument

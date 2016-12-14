@@ -41,7 +41,7 @@ namespace HangBreaker.Tests.Services.Documents {
             fActiveDocument.DoAction(actionName);
         }
 
-        public void SetEditorValue(string editorName, string value) {
+        public void SetEditorValue(string editorName, object value) {
             GuardActiveDocument();
             fActiveDocument.SetEditorValue(editorName, value);
         }
@@ -74,9 +74,5 @@ namespace HangBreaker.Tests.Services.Documents {
             get { return fDocuments; }
         }
         #endregion
-
-        internal void SetEditorValue(string p, BusinessModel.WorkSessionStatus workSessionStatus) {
-            throw new System.NotImplementedException();
-        }
     }
 }
