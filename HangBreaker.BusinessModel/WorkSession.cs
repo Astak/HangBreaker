@@ -25,12 +25,15 @@ namespace HangBreaker.BusinessModel {
             set { SetPropertyValue<DateTime>("StartTime", value); }
         }
 
+        public DateTime EndTime {
+            get { return GetPropertyValue<DateTime>("EndTime"); }
+            set { SetPropertyValue<DateTime>("EndTime", value); }
+        }
+
         public override void AfterConstruction() {
             base.AfterConstruction();
             StartTime = DateTime.Now;
         }
-
-        public WorkSessionStatus? EndTime { get; set; }
     }
 
     public enum WorkSessionStatus { NeedAnswer, NeedExample, NeedToDiscuss, Complete }

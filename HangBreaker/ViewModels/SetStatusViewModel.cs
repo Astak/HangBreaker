@@ -3,6 +3,7 @@ using DevExpress.Mvvm.POCO;
 using HangBreaker.Services;
 using DevExpress.Xpo;
 using DevExpress.Mvvm;
+using System;
 
 namespace HangBreaker.ViewModels {
     public class SetStatusViewModel :ISupportParameter {
@@ -17,6 +18,7 @@ namespace HangBreaker.ViewModels {
             UnitOfWork uow = XpoService.GetUnitOfWork();
             var workSession = uow.GetObjectByKey<WorkSession>(SessionId);
             workSession.Status = Status.Value;
+            workSession.EndTime = DateTime.Now;
             uow.CommitChanges();
         }
 
