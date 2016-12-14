@@ -6,7 +6,9 @@ using HangBreaker.Services;
 using HangBreaker.Utils;
 
 namespace HangBreaker.ViewModels {
-    public class StartSessionViewModel {
+    public class StartSessionViewModel :ISupportParameter {
+        private int WorkSessionKey;
+
         public virtual string TicketID { get; set; }
 
         protected virtual IXpoService XpoService {
@@ -19,7 +21,7 @@ namespace HangBreaker.ViewModels {
 
         public void Start() {
             using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
-                var session = new WorkSession(uow);
+                var session = uow.GetObjectByKey<WorkSession>(WorkSessionKey);
                 session.TicketID = TicketID;
                 uow.CommitChanges();
             }
@@ -33,5 +35,11 @@ namespace HangBreaker.ViewModels {
         protected virtual void OnTicketIDChanged() {
             this.RaiseCanExecuteChanged(vm => vm.Start());
         }
+        #region ISupportParameter
+        object ISupportParameter.Parameter {
+            get { return WorkSessionKey; }
+            set { WorkSessionKey = (int)value; }
+        }
+        #endregion
     }
 }

@@ -125,7 +125,7 @@ namespace HangBreaker.Tests {
             Session session = xpoService.GetSession();
             var workSession = session.Query<WorkSession>()
                 .Select(s => new { s.Status, s.EndTime })
-                .First();
+                .Single();
             Assert.AreEqual(WorkSessionStatus.NeedAnswer, workSession.Status);
             Assert.IsNotNull(workSession.EndTime);
         }
