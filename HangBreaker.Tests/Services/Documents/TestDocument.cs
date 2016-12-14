@@ -19,7 +19,7 @@ namespace HangBreaker.Tests.Services.Documents {
         }
         #region IDocument
         void IDocument.Close(bool force) {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.CloseDocument(this);
             fContent.Invalidate();
         }
@@ -31,14 +31,14 @@ namespace HangBreaker.Tests.Services.Documents {
         bool IDocument.DestroyOnClose { get; set; }
 
         void IDocument.Hide() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.HideDocument(this);
         }
 
         object IDocument.Id { get; set; }
 
         void IDocument.Show() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.DocumentManagerServiceKey);
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.ShowDocument(this);
         }
 

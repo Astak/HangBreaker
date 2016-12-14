@@ -1,4 +1,5 @@
 ﻿using DevExpress.Mvvm;
+using HangBreaker.Utils;
 using DevExpress.Mvvm.POCO;
 using System;
 using System.Globalization;
@@ -17,7 +18,7 @@ namespace HangBreaker.ViewModels {
         public virtual bool IsTransparent { get; set; }
 
         private IDocumentManagerService DocumentManagerService {
-            get { return ServiceContainer.Default.GetService<IDocumentManagerService>("HangBreaker"); }
+            get { return ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.ServiceKey); }
         }
 
         public bool CanStart() {

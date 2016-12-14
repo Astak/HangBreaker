@@ -67,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IXpoService.cs" />
+    <Compile Include="Utils\Constants.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SetStatusViewModel.cs" />
     <Compile Include="ViewModels\StartSessionViewModel.cs" />
