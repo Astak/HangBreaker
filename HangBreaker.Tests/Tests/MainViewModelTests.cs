@@ -118,7 +118,7 @@ namespace HangBreaker.Tests {
             documentManagerService.DoAction(TestMainView.StartActionName);
             documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
             documentManagerService.DoAction(TestStartSessionView.OKActionName);
-            documentManagerService.DoAction("Restart");
+            documentManagerService.DoAction(TestMainView.RestartActionName);
             documentManagerService.SetEditorValue("Status", WorkSessionStatus.NeedAnswer);
             documentManagerService.DoAction("OK");
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();

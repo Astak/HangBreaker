@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace HangBreaker.Tests.Views {
     public class TestMainView :TestBaseView {
         public const string StartActionName = "Start";
+        public const string RestartActionName = "Restart";
+
         public TestAction StartAction { get; private set; }
         public TestAction RestartAction { get; private set; }
         public TestAction TimerAction { get; private set; }
@@ -15,7 +17,6 @@ namespace HangBreaker.Tests.Views {
         public TestMainView() {
             Context.ViewModelType = typeof(MainViewModel);
             StartAction = new TestAction();
-            AddAction(StartActionName, StartAction);
             RestartAction = new TestAction();
             TimerAction = new TestAction();
             DisplayControl = new TestControl<string>();
@@ -26,6 +27,8 @@ namespace HangBreaker.Tests.Views {
             api.BindCommand(TimerAction, vm => vm.Tick());
             api.SetBinding(DisplayControl, ctrl => ctrl.Value, vm => vm.DisplayText);
             api.SetBinding(OpacityControl, ctrl => ctrl.Value, vm => vm.IsTransparent);
+            AddAction(StartActionName, StartAction);
+            AddAction(RestartActionName, RestartAction);
         }
 
         public void TestInitialState() {
