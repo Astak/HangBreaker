@@ -119,7 +119,7 @@ namespace HangBreaker.Tests {
             documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
             documentManagerService.DoAction(TestStartSessionView.OKActionName);
             documentManagerService.DoAction(TestMainView.RestartActionName);
-            documentManagerService.SetEditorValue("Status", WorkSessionStatus.NeedAnswer);
+            documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedAnswer);
             documentManagerService.DoAction("OK");
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
             Session session = xpoService.GetSession();

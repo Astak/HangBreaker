@@ -5,6 +5,8 @@ using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
     public class TestSetStatusView :TestBaseView {
+        public const string SetStatusEditorName = "Status";
+
         public readonly TestAction OKAction;
         public readonly TestControl<WorkSessionStatus?> StatusControl;
 
@@ -15,6 +17,7 @@ namespace HangBreaker.Tests.Views {
             var api = Context.OfType<SetStatusViewModel>();
             api.BindCommand(OKAction, vm => vm.Ok());
             api.SetBinding(StatusControl, ctrl => ctrl.Value, vm => vm.Status);
+            AddEditor(SetStatusEditorName, StatusControl);
         }
     }
 }
