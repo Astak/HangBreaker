@@ -3,11 +3,15 @@ using HangBreaker.Utils;
 using DevExpress.Mvvm.POCO;
 using System;
 using System.Globalization;
+using DevExpress.Xpo;
+using HangBreaker.Services;
+using HangBreaker.BusinessModel;
 
 namespace HangBreaker.ViewModels {
     public class MainViewModel {
         private IViewModelState State;
         private int Elapsed;
+        private int WorkSessionKey;
 
         public MainViewModel() {
             DisplayText = "Hello";
@@ -21,6 +25,10 @@ namespace HangBreaker.ViewModels {
             get { return ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.ServiceKey); }
         }
 
+        protected virtual IXpoService XpoService {
+            get { throw new System.NotImplementedException(); }
+        }
+
         public bool CanStart() {
             return State.CanStart;
         }
@@ -30,7 +38,12 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Start() {
-            IDocument document = DocumentManagerService.CreateDocument("StartSession", null, null);
+            using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
+                var workSession = new WorkSession(uow);
+                uow.CommitChanges();
+                WorkSessionKey = workSession.Oid;
+            }
+            IDocument document = DocumentManagerService.CreateDocument("StartSession", WorkSessionKey, null);
             document.Show();
             DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChanged;
         }
@@ -41,6 +54,13 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Restart() {
+            IDocument document = DocumentManagerService.CreateDocument("SetStatus", WorkSessionKey, null);
+            document.Show();
+            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChangedAfterSetStatus;
+        }
+
+        private void OnActiveDocumentChangedAfterSetStatus(object sender, ActiveDocumentChangedEventArgs e) {
+            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChangedAfterSetStatus;
             UpdateState(new PreviewViewModelState(this));
         }
 
