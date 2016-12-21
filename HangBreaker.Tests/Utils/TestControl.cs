@@ -11,8 +11,9 @@ namespace HangBreaker.Tests.Utils {
             }
         }
 
-        public override void SetValue(object value) {
-            Value = (T)value;
+        public override object ValueCore {
+            get { return Value; }
+            set { Value = (T)value; }
         }
     }
 }

@@ -46,6 +46,11 @@ namespace HangBreaker.Tests.Services.Documents {
             fActiveDocument.SetEditorValue(editorName, value);
         }
 
+        public T GetEditorValue<T>(string editorName) {
+            GuardActiveDocument();
+            return (T)fActiveDocument.GetEditorValue(editorName);
+        }
+
         private void GuardActiveDocument() {
             if (fActiveDocument == null) throw new System.InvalidOperationException("No active document");
         }

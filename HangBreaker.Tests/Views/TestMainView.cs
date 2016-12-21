@@ -7,6 +7,8 @@ namespace HangBreaker.Tests.Views {
     public class TestMainView :TestBaseView {
         public const string StartActionName = "Start";
         public const string RestartActionName = "Restart";
+        public const string DisplayEditorName = "Display";
+        public const string TimerActionName = "Timer";
 
         public TestAction StartAction { get; private set; }
         public TestAction RestartAction { get; private set; }
@@ -29,6 +31,8 @@ namespace HangBreaker.Tests.Views {
             api.SetBinding(OpacityControl, ctrl => ctrl.Value, vm => vm.IsTransparent);
             AddAction(StartActionName, StartAction);
             AddAction(RestartActionName, RestartAction);
+            AddAction(TimerActionName, TimerAction);
+            AddEditor(DisplayEditorName, DisplayControl);
         }
 
         public void TestInitialState() {
@@ -60,10 +64,6 @@ namespace HangBreaker.Tests.Views {
             Assert.IsFalse(StartAction.Enabled);
             Assert.IsTrue(RestartAction.Enabled);
             Assert.AreEqual<string>("Overtime", DisplayControl.Value);
-        }
-
-        public void WaitFor(int seconds) {
-            for (int i = 0; i < seconds; i++) TimerAction.Execute();
         }
     }
 }

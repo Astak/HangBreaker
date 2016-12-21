@@ -2,7 +2,7 @@
 
 namespace HangBreaker.Tests.Utils {
     public abstract class TestControlBase {
-        public abstract void SetValue(object value);
+        public abstract object ValueCore { get; set; }
 
         protected void OnValueChanged() {
             if (fValueChanged != null)

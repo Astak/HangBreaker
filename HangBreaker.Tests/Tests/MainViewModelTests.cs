@@ -20,11 +20,11 @@ namespace HangBreaker.Tests {
             mainView.TestInitialState();
             mainView.StartAction.Execute();
             mainView.TestReviewState();
-            mainView.WaitFor(ReviewInterval);
+            WaitFor(ReviewInterval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
             mainView.TestWorkState();
-            mainView.WaitFor(WorkInterval);
+            WaitFor(WorkInterval);
             mainView.TestWorkOverflowState();
             mainView.Invalidate();
         }
@@ -33,80 +33,118 @@ namespace HangBreaker.Tests {
         public void RestartActionTest() {
             var mainView = new TestMainView();
             mainView.StartAction.Execute();
-            mainView.WaitFor(147);
+            WaitFor(147);
             mainView.TestReviewState();
             mainView.RestartAction.Execute();
             int interval = 187;
-            mainView.WaitFor(interval);
+            WaitFor(interval);
             mainView.TestReviewState();
-            mainView.WaitFor(ReviewInterval - interval);
+            WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.RestartAction.Execute();
             interval = 39;
-            mainView.WaitFor(interval);
+            WaitFor(interval);
             mainView.TestReviewState();
-            mainView.WaitFor(ReviewInterval - interval);
+            WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
-            mainView.WaitFor(66);
+            WaitFor(66);
             mainView.TestWorkState();
             mainView.RestartAction.Execute();
             interval = 154;
-            mainView.WaitFor(interval);
+            WaitFor(interval);
             mainView.TestReviewState();
-            mainView.WaitFor(ReviewInterval - interval);
+            WaitFor(ReviewInterval - interval);
             mainView.TestReviewOverflowState();
             mainView.StartAction.Execute();
-            mainView.WaitFor(WorkInterval);
+            WaitFor(WorkInterval);
             mainView.TestWorkOverflowState();
             mainView.RestartAction.Execute();
-            mainView.WaitFor(276);
+            WaitFor(276);
             mainView.TestReviewState();
             mainView.Invalidate();
         }
 
         [TestMethod]
         public void DisplayTest() {
-            var mainView = new TestMainView();
-            Assert.AreEqual<string>("Hello", mainView.DisplayControl.Value);
-            mainView.StartAction.Execute();
-            Assert.AreEqual<string>("00:15:00", mainView.DisplayControl.Value);
+            //var mainView = new TestMainView();
+            //Assert.AreEqual<string>("Hello", mainView.DisplayControl.Value);
+            //mainView.StartAction.Execute();
+            //Assert.AreEqual<string>("00:15:00", mainView.DisplayControl.Value);
+            //int interval = 19;
+            //mainView.WaitFor(interval);
+            //Assert.AreEqual<string>("00:14:41", mainView.DisplayControl.Value);
+            //mainView.WaitFor(ReviewInterval - interval - 1);
+            //Assert.AreEqual<string>("00:10:01", mainView.DisplayControl.Value);
+            //mainView.WaitFor(1);
+            //Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
+            //mainView.StartAction.Execute();
+            //Assert.AreEqual<string>("00:10:00", mainView.DisplayControl.Value);
+            //interval = 2;
+            //mainView.WaitFor(interval);
+            //Assert.AreEqual<string>("00:09:58", mainView.DisplayControl.Value);
+            //mainView.WaitFor(WorkInterval - interval - 1);
+            //Assert.AreEqual<string>("00:00:01", mainView.DisplayControl.Value);
+            //mainView.WaitFor(1);
+            //Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
+            //mainView.Invalidate();
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            IDocument document = documentManagerService.CreateDocument(HangBreaker.Utils.Constants.MainViewName, null, null);
+            document.Show();
+            var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("Hello", displayValue);
+            documentManagerService.DoAction(TestMainView.StartActionName);
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:15:00", displayValue);
             int interval = 19;
-            mainView.WaitFor(interval);
-            Assert.AreEqual<string>("00:14:41", mainView.DisplayControl.Value);
-            mainView.WaitFor(ReviewInterval - interval - 1);
-            Assert.AreEqual<string>("00:10:01", mainView.DisplayControl.Value);
-            mainView.WaitFor(1);
-            Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
-            mainView.StartAction.Execute();
-            Assert.AreEqual<string>("00:10:00", mainView.DisplayControl.Value);
+            WaitFor(interval);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:14:41", displayValue);
+            WaitFor(ReviewInterval - interval - 1);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:10:01", displayValue);
+            WaitFor(1);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("Overtime", displayValue);
+            documentManagerService.DoAction(TestMainView.StartActionName);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:10:00", displayValue);
             interval = 2;
-            mainView.WaitFor(interval);
-            Assert.AreEqual<string>("00:09:58", mainView.DisplayControl.Value);
-            mainView.WaitFor(WorkInterval - interval - 1);
-            Assert.AreEqual<string>("00:00:01", mainView.DisplayControl.Value);
-            mainView.WaitFor(1);
-            Assert.AreEqual<string>("Overtime", mainView.DisplayControl.Value);
-            mainView.Invalidate();
+            WaitFor(interval);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:09:58", displayValue);
+            WaitFor(WorkInterval - interval - 1);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("00:00:01", displayValue);
+            WaitFor(1);
+            displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.AreEqual("Overtime", displayValue);
+        }
+
+        private void WaitFor(int interval) {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            for (int i = 0; i < interval; i++) documentManagerService.DoAction(TestMainView.TimerActionName);
         }
 
         [TestMethod]
         public void OpacityTest() {
             var mainView = new TestMainView();
             mainView.StartAction.Execute();
-            mainView.WaitFor(ReviewInterval);
+            WaitFor(ReviewInterval);
             Assert.IsTrue(mainView.OpacityControl.Value);
-            mainView.WaitFor(1);
+            WaitFor(1);
             Assert.IsFalse(mainView.OpacityControl.Value);
-            mainView.WaitFor(273);
+            WaitFor(273);
             Assert.IsTrue(mainView.OpacityControl.Value);
-            mainView.WaitFor(284);
+            WaitFor(284);
             Assert.IsTrue(mainView.OpacityControl.Value);
-            mainView.WaitFor(WorkInterval);
+            WaitFor(WorkInterval);
             Assert.IsTrue(mainView.OpacityControl.Value);
-            mainView.WaitFor(109);
+            WaitFor(109);
             Assert.IsFalse(mainView.OpacityControl.Value);
-            mainView.WaitFor(213);
+            WaitFor(213);
             Assert.IsTrue(mainView.OpacityControl.Value);
             mainView.Invalidate();
         }

@@ -39,14 +39,13 @@ namespace HangBreaker.Tests.Views {
         }
 
         public void SetEditorValue(string editorName, object value) {
-            TestControlBase editor = null;
-            if (Editors.TryGetValue(editorName, out editor)) editor.SetValue(value);
-            else {
-                var msg = string.Format(CultureInfo.CurrentUICulture,
-                    "{0} view does not have {1} editor",
-                    GetType().Name, editorName);
-                throw new System.InvalidOperationException(msg);
-            }
+            TestControlBase editor = GetEditor(editorName);
+            editor.ValueCore = value;
+        }
+
+        public object GetEditorValue(string editorName) {
+            TestControlBase editor = GetEditor(editorName);
+            return editor.ValueCore;
         }
 
         protected void AddAction(string name, TestAction action) {
@@ -55,6 +54,15 @@ namespace HangBreaker.Tests.Views {
 
         protected void AddEditor(string editorName, TestControlBase editor) {
             Editors.Add(editorName, editor);
+        }
+
+        private TestControlBase GetEditor(string editorName) {
+            TestControlBase editor = null;
+            if (Editors.TryGetValue(editorName, out editor)) return editor;
+            var msg = string.Format(CultureInfo.CurrentUICulture,
+                "{0} view does not have {1} editor",
+                GetType().Name, editorName);
+            throw new System.InvalidOperationException(msg);
         }
     }
 }
