@@ -38,6 +38,10 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Start() {
+            State.Start();
+        }
+
+        private void CreateSessionAsync(Action callback) {
             using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
                 var workSession = new WorkSession(uow);
                 uow.CommitChanges();
@@ -45,12 +49,12 @@ namespace HangBreaker.ViewModels {
             }
             IDocument document = DocumentManagerService.CreateDocument(Constants.StartSessionViewName, WorkSessionKey, null);
             document.Show();
-            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChanged;
-        }
-
-        private void OnActiveDocumentChanged(object sender, ActiveDocumentChangedEventArgs e) {
-            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChanged;
-            State.Start();
+            ActiveDocumentChangedEventHandler handler = null;
+            handler = (s, e) => {
+                DocumentManagerService.ActiveDocumentChanged -= handler;
+                callback();
+            };
+            DocumentManagerService.ActiveDocumentChanged += handler;
         }
 
         public void Restart() {
@@ -158,7 +162,7 @@ namespace HangBreaker.ViewModels {
             }
 
             protected override void Start() {
-                ViewModel.UpdateState(new PreviewViewModelState(ViewModel));
+                ViewModel.CreateSessionAsync(() => ViewModel.UpdateState(new PreviewViewModelState(ViewModel)));
             }
 
             protected override void OnElapsed() { }
