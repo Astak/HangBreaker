@@ -9,6 +9,7 @@ namespace HangBreaker.Tests.Views {
         public const string RestartActionName = "Restart";
         public const string DisplayEditorName = "Display";
         public const string TimerActionName = "Timer";
+        public const string OpacityEditorName = "Opacity";
 
         public TestAction StartAction { get; private set; }
         public TestAction RestartAction { get; private set; }
@@ -33,6 +34,7 @@ namespace HangBreaker.Tests.Views {
             AddAction(RestartActionName, RestartAction);
             AddAction(TimerActionName, TimerAction);
             AddEditor(DisplayEditorName, DisplayControl);
+            AddEditor(OpacityEditorName, OpacityControl);
         }
 
         public void TestInitialState() {

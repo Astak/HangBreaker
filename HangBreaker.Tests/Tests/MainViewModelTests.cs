@@ -67,14 +67,10 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void DisplayTest() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            IDocument document = documentManagerService.CreateDocument(HangBreaker.Utils.Constants.MainViewName, null, null);
-            document.Show();
+            TestDocumentManagerService documentManagerService = StartMainView();
             var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("Hello", displayValue);
-            documentManagerService.DoAction(TestMainView.StartActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
-            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+            StartNewTicket();
             displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("00:15:00", displayValue);
             int interval = 19;
@@ -100,32 +96,37 @@ namespace HangBreaker.Tests {
             WaitFor(1);
             displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("Overtime", displayValue);
-        }
-
-        private void WaitFor(int interval) {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            for (int i = 0; i < interval; i++) documentManagerService.DoAction(TestMainView.TimerActionName);
+            // TODO
+            //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
         public void OpacityTest() {
-            var mainView = new TestMainView();
-            mainView.StartAction.Execute();
+            TestDocumentManagerService documentManagerService = StartMainView();
+            StartNewTicket();
             WaitFor(ReviewInterval);
-            Assert.IsTrue(mainView.OpacityControl.Value);
+            var isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(isTransparent);
             WaitFor(1);
-            Assert.IsFalse(mainView.OpacityControl.Value);
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsFalse(isTransparent);
             WaitFor(273);
-            Assert.IsTrue(mainView.OpacityControl.Value);
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(isTransparent);
             WaitFor(284);
-            Assert.IsTrue(mainView.OpacityControl.Value);
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(isTransparent);
             WaitFor(WorkInterval);
-            Assert.IsTrue(mainView.OpacityControl.Value);
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(isTransparent);
             WaitFor(109);
-            Assert.IsFalse(mainView.OpacityControl.Value);
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsFalse(isTransparent);
             WaitFor(213);
-            Assert.IsTrue(mainView.OpacityControl.Value);
-            mainView.Invalidate();
+            isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(isTransparent);
+            // TODO
+            //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
         
         [TestMethod]
@@ -165,5 +166,25 @@ namespace HangBreaker.Tests {
                 Assert.AreEqual(2, sessionCnt);
             }
         }
+
+        private static void StartNewTicket() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            documentManagerService.DoAction(TestMainView.StartActionName);
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+        }
+
+        private static void WaitFor(int interval) {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            for (int i = 0; i < interval; i++) documentManagerService.DoAction(TestMainView.TimerActionName);
+        }
+
+        private static TestDocumentManagerService StartMainView() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            IDocument document = documentManagerService.CreateDocument(HangBreaker.Utils.Constants.MainViewName, null, null);
+            document.Show();
+            return documentManagerService;
+        }
+
     }
 }
