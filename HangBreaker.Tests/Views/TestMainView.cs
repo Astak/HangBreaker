@@ -11,19 +11,13 @@ namespace HangBreaker.Tests.Views {
         public const string TimerActionName = "Timer";
         public const string OpacityEditorName = "Opacity";
 
-        public TestAction StartAction { get; private set; }
-        public TestAction RestartAction { get; private set; }
-        public TestAction TimerAction { get; private set; }
-        public TestControl<string> DisplayControl { get; private set; }
-        public TestControl<bool> OpacityControl { get; private set; }
-
         public TestMainView() {
             Context.ViewModelType = typeof(MainViewModel);
-            StartAction = new TestAction();
-            RestartAction = new TestAction();
-            TimerAction = new TestAction();
-            DisplayControl = new TestControl<string>();
-            OpacityControl = new TestControl<bool>();
+            var StartAction = new TestAction();
+            var RestartAction = new TestAction();
+            var TimerAction = new TestAction();
+            var DisplayControl = new TestControl<string>();
+            var OpacityControl = new TestControl<bool>();
             var api = Context.OfType<MainViewModel>();
             api.BindCommand(StartAction, vm => vm.Start());
             api.BindCommand(RestartAction, vm => vm.Restart());
