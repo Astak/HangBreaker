@@ -129,44 +129,6 @@ namespace HangBreaker.Tests {
             //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
         
-        [TestMethod]
-        public void RefreshSetsStatusAndEndTime() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            documentManagerService.CreateDocument(Constants.MainViewName, null, null).Show();
-            documentManagerService.DoAction(TestMainView.StartActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
-            documentManagerService.DoAction(TestStartSessionView.OKActionName);
-            documentManagerService.DoAction(TestMainView.RestartActionName);
-            documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedAnswer);
-            documentManagerService.DoAction(TestSetStatusView.OKActionName);
-            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            Session session = xpoService.GetSession();
-            var workSession = session.Query<WorkSession>()
-                .Select(s => new { s.Status, s.EndTime })
-                .Single();
-            Assert.AreEqual(WorkSessionStatus.NeedAnswer, workSession.Status);
-            Assert.IsNotNull(workSession.EndTime);
-        }
-
-        [TestMethod]
-        public void RestartActionShouldCreateNewSession() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            documentManagerService.CreateDocument(Constants.MainViewName, null, null).Show();
-            documentManagerService.DoAction(TestMainView.StartActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
-            documentManagerService.DoAction(TestStartSessionView.OKActionName);
-            documentManagerService.DoAction(TestMainView.RestartActionName);
-            documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedAnswer);
-            documentManagerService.DoAction(TestSetStatusView.OKActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "123457");
-            documentManagerService.DoAction(TestStartSessionView.OKActionName);
-            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            using (Session session = xpoService.GetSession()) {
-                int sessionCnt = session.Query<WorkSession>().Count();
-                Assert.AreEqual(2, sessionCnt);
-            }
-        }
-
         private static void StartNewTicket() {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.DoAction(TestMainView.StartActionName);
