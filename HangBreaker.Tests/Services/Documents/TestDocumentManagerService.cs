@@ -41,6 +41,11 @@ namespace HangBreaker.Tests.Services.Documents {
             fActiveDocument.DoAction(actionName);
         }
 
+        public bool CanDoAction(string actionName) {
+            GuardActiveDocument();
+            return fActiveDocument.CanDoAction(actionName);
+        }
+
         public void SetEditorValue(string editorName, object value) {
             GuardActiveDocument();
             fActiveDocument.SetEditorValue(editorName, value);

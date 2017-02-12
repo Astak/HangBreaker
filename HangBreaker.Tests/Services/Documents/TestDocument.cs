@@ -14,6 +14,10 @@ namespace HangBreaker.Tests.Services.Documents {
             fContent.DoAction(actionName);
         }
 
+        public bool CanDoAction(string actionName) {
+            return fContent.CanDoAction(actionName);
+        }
+
         public void SetEditorValue(string editorName, object value) {
             fContent.SetEditorValue(editorName, value);
         }
