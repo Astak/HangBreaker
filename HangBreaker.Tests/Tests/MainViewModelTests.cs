@@ -31,38 +31,39 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void RestartActionTest() {
-            var mainView = new TestMainView();
-            mainView.StartAction.Execute();
+            TestDocumentManagerService documentManagerService = StartMainView();
+            StartNewTicket();
             WaitFor(147);
-            mainView.TestReviewState();
-            mainView.RestartAction.Execute();
+            TestReviewState();
+            RestartSession();
             int interval = 187;
             WaitFor(interval);
-            mainView.TestReviewState();
+            TestReviewState();
             WaitFor(ReviewInterval - interval);
-            mainView.TestReviewOverflowState();
-            mainView.RestartAction.Execute();
+            TestReviewOverflowState();
+            RestartSession();
             interval = 39;
             WaitFor(interval);
-            mainView.TestReviewState();
+            TestReviewState();
             WaitFor(ReviewInterval - interval);
-            mainView.TestReviewOverflowState();
-            mainView.StartAction.Execute();
+            TestReviewOverflowState();
+            documentManagerService.DoAction(TestMainView.StartActionName);
             WaitFor(66);
-            mainView.TestWorkState();
-            mainView.RestartAction.Execute();
+            TestWorkState();
+            RestartSession();
             interval = 154;
             WaitFor(interval);
-            mainView.TestReviewState();
+            TestReviewState();
             WaitFor(ReviewInterval - interval);
-            mainView.TestReviewOverflowState();
-            mainView.StartAction.Execute();
+            TestReviewOverflowState();
+            documentManagerService.DoAction(TestMainView.StartActionName);
             WaitFor(WorkInterval);
-            mainView.TestWorkOverflowState();
-            mainView.RestartAction.Execute();
+            TestWorkOverflowState();
+            RestartSession();
             WaitFor(276);
-            mainView.TestReviewState();
-            mainView.Invalidate();
+            TestReviewState();
+            // TODO
+            //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
@@ -128,18 +129,6 @@ namespace HangBreaker.Tests {
             // TODO
             //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
-        
-        private static void StartNewTicket() {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            documentManagerService.DoAction(TestMainView.StartActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
-            documentManagerService.DoAction(TestStartSessionView.OKActionName);
-        }
-
-        private static void WaitFor(int interval) {
-            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            for (int i = 0; i < interval; i++) documentManagerService.DoAction(TestMainView.TimerActionName);
-        }
 
         private static TestDocumentManagerService StartMainView() {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
@@ -148,5 +137,76 @@ namespace HangBreaker.Tests {
             return documentManagerService;
         }
 
+        private static void StartNewTicket() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            documentManagerService.DoAction(TestMainView.StartActionName);
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+        }
+
+        private static void RestartSession() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            documentManagerService.DoAction(TestMainView.RestartActionName);
+            documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedExample);
+            documentManagerService.DoAction(TestSetStatusView.OKActionName);
+            StartNewTicket();
+        }
+
+        private static void WaitFor(int interval) {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            for (int i = 0; i < interval; i++) documentManagerService.DoAction(TestMainView.TimerActionName);
+        }
+
+        private static void TestInitialState() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            bool canDoStart = documentManagerService.CanDoAction(TestMainView.StartActionName);
+            bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
+            var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            var opacityValue = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsTrue(canDoStart);
+            Assert.IsFalse(canDoRestart);
+            Assert.AreEqual<string>("Hello", displayValue);
+            Assert.IsFalse(opacityValue);
+        }
+
+        private static void TestReviewState() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            bool canDoStart = documentManagerService.CanDoAction(TestMainView.StartActionName);
+            bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
+            var opacityValue = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsFalse(canDoStart);
+            Assert.IsTrue(canDoRestart);
+            Assert.IsTrue(opacityValue);
+        }
+
+        private static void TestReviewOverflowState() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            bool canDoStart = documentManagerService.CanDoAction(TestMainView.StartActionName);
+            bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
+            var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.IsTrue(canDoStart);
+            Assert.IsFalse(canDoRestart);
+            Assert.AreEqual<string>("Overtime", displayValue);
+        }
+
+        private static void TestWorkState() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            bool canDoStart = documentManagerService.CanDoAction(TestMainView.StartActionName);
+            bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
+            var opacityValue = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
+            Assert.IsFalse(canDoStart);
+            Assert.IsTrue(canDoRestart);
+            Assert.IsTrue(opacityValue);
+        }
+
+        private static void TestWorkOverflowState() {
+            var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
+            bool canDoStart = documentManagerService.CanDoAction(TestMainView.StartActionName);
+            bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
+            var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
+            Assert.IsFalse(canDoStart);
+            Assert.IsTrue(canDoRestart);
+            Assert.AreEqual<string>("Overtime", displayValue);
+        }
     }
 }
