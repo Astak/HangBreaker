@@ -36,36 +36,5 @@ namespace HangBreaker.Tests.Views {
             AddEditor(DisplayEditorName, DisplayControl);
             AddEditor(OpacityEditorName, OpacityControl);
         }
-
-        public void TestInitialState() {
-            Assert.IsTrue(StartAction.Enabled);
-            Assert.IsFalse(RestartAction.Enabled);
-            Assert.AreEqual<string>("Hello", DisplayControl.Value);
-            Assert.IsFalse(OpacityControl.Value);
-        }
-
-        public void TestReviewState() {
-            Assert.IsFalse(StartAction.Enabled);
-            Assert.IsTrue(RestartAction.Enabled);
-            Assert.IsTrue(OpacityControl.Value);
-        }
-
-        public void TestReviewOverflowState() {
-            Assert.IsTrue(StartAction.Enabled);
-            Assert.IsTrue(RestartAction.Enabled);
-            Assert.AreEqual<string>("Overtime", DisplayControl.Value);
-        }
-
-        public void TestWorkState() {
-            Assert.IsFalse(StartAction.Enabled);
-            Assert.IsTrue(RestartAction.Enabled);
-            Assert.IsTrue(OpacityControl.Value);
-        }
-
-        public void TestWorkOverflowState() {
-            Assert.IsFalse(StartAction.Enabled);
-            Assert.IsTrue(RestartAction.Enabled);
-            Assert.AreEqual<string>("Overtime", DisplayControl.Value);
-        }
     }
 }

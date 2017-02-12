@@ -16,17 +16,18 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void StartActionTest() {
-            var mainView = new TestMainView();
-            mainView.TestInitialState();
-            mainView.StartAction.Execute();
-            mainView.TestReviewState();
+            TestDocumentManagerService documentManagerService = StartMainView();
+            TestInitialState();
+            StartNewTicket();
+            TestReviewState();
             WaitFor(ReviewInterval);
-            mainView.TestReviewOverflowState();
-            mainView.StartAction.Execute();
-            mainView.TestWorkState();
+            TestReviewOverflowState();
+            documentManagerService.DoAction(TestMainView.StartActionName);
+            TestWorkState();
             WaitFor(WorkInterval);
-            mainView.TestWorkOverflowState();
-            mainView.Invalidate();
+            TestWorkOverflowState();
+            // TODO
+            //documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
