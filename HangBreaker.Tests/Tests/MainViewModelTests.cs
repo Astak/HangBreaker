@@ -149,7 +149,8 @@ namespace HangBreaker.Tests {
             documentManagerService.DoAction(TestMainView.RestartActionName);
             documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedExample);
             documentManagerService.DoAction(TestSetStatusView.OKActionName);
-            StartNewTicket();
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
         }
 
         private static void WaitFor(int interval) {
@@ -185,7 +186,7 @@ namespace HangBreaker.Tests {
             bool canDoRestart = documentManagerService.CanDoAction(TestMainView.RestartActionName);
             var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.IsTrue(canDoStart);
-            Assert.IsFalse(canDoRestart);
+            Assert.IsTrue(canDoRestart);
             Assert.AreEqual<string>("Overtime", displayValue);
         }
 
