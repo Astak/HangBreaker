@@ -143,10 +143,25 @@ namespace HangBreaker.Tests {
             Session session = xpoService.GetSession();
             DateTime from = DateTime.Now.AddSeconds(-1);
             DateTime to = DateTime.Now.AddSeconds(1);
-            var workSession = session.Query<WorkSession>()
+            session.Query<WorkSession>()
                 .Where(s => s.TicketID == "T123456" &&
                     s.StartTime > from && s.StartTime <= to)
                 .Single();
+        }
+
+        [TestMethod]
+        public void RestartSessionSetsEndTime() {
+            TestDocumentManagerService documentManagerService = StartMainView();
+            StartNewTicket("T123456");
+            RestartSession("T123457");
+            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
+            Session session = xpoService.GetSession();
+            DateTime from = DateTime.Now.AddSeconds(-1);
+            DateTime to = DateTime.Now.AddSeconds(1);
+            session.Query<WorkSession>()
+                .Where(s => s.TicketID == "T123456" &&
+                    s.EndTime > from && s.EndTime <= to)
+                    .Single();
         }
 
         private static TestDocumentManagerService StartMainView() {
