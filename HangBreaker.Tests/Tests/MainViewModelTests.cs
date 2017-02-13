@@ -2,10 +2,12 @@
 using DevExpress.Xpo;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
+using HangBreaker.Tests.Services;
 using HangBreaker.Tests.Services.Documents;
 using HangBreaker.Tests.Utils;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace HangBreaker.Tests {
@@ -14,11 +16,17 @@ namespace HangBreaker.Tests {
         private const int ReviewInterval = 5 * 60;
         private const int WorkInterval = 10 * 60;
 
+        [TestCleanup]
+        public void Cleanup() {
+            var xpoService = (TestXpoService)ServiceContainer.Default.GetService<IXpoService>();
+            xpoService.Cleanup();
+        }
+
         [TestMethod]
         public void StartActionTest() {
             TestDocumentManagerService documentManagerService = StartMainView();
             TestInitialState();
-            StartNewTicket();
+            StartNewTicket("T123456");
             TestReviewState();
             WaitFor(ReviewInterval);
             TestReviewOverflowState();
@@ -32,16 +40,16 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void RestartActionTest() {
             TestDocumentManagerService documentManagerService = StartMainView();
-            StartNewTicket();
+            StartNewTicket("T123456");
             WaitFor(147);
             TestReviewState();
-            RestartSession();
+            RestartSession("T123457");
             int interval = 187;
             WaitFor(interval);
             TestReviewState();
             WaitFor(ReviewInterval - interval);
             TestReviewOverflowState();
-            RestartSession();
+            RestartSession("T123458");
             interval = 39;
             WaitFor(interval);
             TestReviewState();
@@ -50,7 +58,7 @@ namespace HangBreaker.Tests {
             documentManagerService.DoAction(TestMainView.StartActionName);
             WaitFor(66);
             TestWorkState();
-            RestartSession();
+            RestartSession("T123459");
             interval = 154;
             WaitFor(interval);
             TestReviewState();
@@ -59,7 +67,7 @@ namespace HangBreaker.Tests {
             documentManagerService.DoAction(TestMainView.StartActionName);
             WaitFor(WorkInterval);
             TestWorkOverflowState();
-            RestartSession();
+            RestartSession("T123460");
             WaitFor(276);
             TestReviewState();
             documentManagerService.DoAction(TestMainView.CloseActionName);
@@ -70,7 +78,7 @@ namespace HangBreaker.Tests {
             TestDocumentManagerService documentManagerService = StartMainView();
             var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("Hello", displayValue);
-            StartNewTicket();
+            StartNewTicket("T123456");
             displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("00:15:00", displayValue);
             int interval = 19;
@@ -102,7 +110,7 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void OpacityTest() {
             TestDocumentManagerService documentManagerService = StartMainView();
-            StartNewTicket();
+            StartNewTicket("T123456");
             WaitFor(ReviewInterval);
             var isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
             Assert.IsTrue(isTransparent);
@@ -127,6 +135,20 @@ namespace HangBreaker.Tests {
             documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
+        [TestMethod]
+        public void StartSessionSetsStartTime() {
+            TestDocumentManagerService documentManagerService = StartMainView();
+            StartNewTicket("T123456");
+            var xpoService = ServiceContainer.Default.GetService<IXpoService>();
+            Session session = xpoService.GetSession();
+            DateTime from = DateTime.Now.AddSeconds(-1);
+            DateTime to = DateTime.Now.AddSeconds(1);
+            var workSession = session.Query<WorkSession>()
+                .Where(s => s.TicketID == "T123456" &&
+                    s.StartTime > from && s.StartTime <= to)
+                .Single();
+        }
+
         private static TestDocumentManagerService StartMainView() {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             IDocument document = documentManagerService.CreateDocument(HangBreaker.Utils.Constants.MainViewName, null, null);
@@ -134,19 +156,19 @@ namespace HangBreaker.Tests {
             return documentManagerService;
         }
 
-        private static void StartNewTicket() {
+        private static void StartNewTicket(string ticketId) {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.DoAction(TestMainView.StartActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, ticketId);
             documentManagerService.DoAction(TestStartSessionView.OKActionName);
         }
 
-        private static void RestartSession() {
+        private static void RestartSession(string ticketId) {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
             documentManagerService.DoAction(TestMainView.RestartActionName);
             documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedExample);
             documentManagerService.DoAction(TestSetStatusView.OKActionName);
-            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, ticketId);
             documentManagerService.DoAction(TestStartSessionView.OKActionName);
         }
 
