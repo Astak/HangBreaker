@@ -4,7 +4,7 @@ using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
-    public class TestSetStatusView :TestBaseView {
+    public class TestSetStatusView :TestBaseView<SetStatusViewModel> {
         public const string SetStatusEditorName = "Status";
         public const string OKActionName = "OK";
 
@@ -12,7 +12,6 @@ namespace HangBreaker.Tests.Views {
         public readonly TestControl<WorkSessionStatus?> StatusControl;
 
         public TestSetStatusView() {
-            Context.ViewModelType = typeof(SetStatusViewModel);
             OKAction = new TestAction();
             StatusControl = new TestControl<WorkSessionStatus?>();
             var api = Context.OfType<SetStatusViewModel>();

@@ -33,7 +33,7 @@ namespace HangBreaker.Tests.Services.Documents {
         }
 
         object IDocument.Content {
-            get { return fContent; }
+            get { return fContent.ViewModel; }
         }
 
         bool IDocument.DestroyOnClose { get; set; }

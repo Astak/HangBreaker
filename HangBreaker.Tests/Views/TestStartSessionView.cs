@@ -3,7 +3,7 @@ using HangBreaker.Tests.Utils;
 using HangBreaker.ViewModels;
 
 namespace HangBreaker.Tests.Views {
-    public class TestStartSessionView :TestBaseView {
+    public class TestStartSessionView :TestBaseView<StartSessionViewModel> {
         public const string TicketIDEditorName = "TicketID";
         public const string OKActionName = "OK";
 
@@ -11,7 +11,6 @@ namespace HangBreaker.Tests.Views {
         public readonly TestControl<string> TicketIDControl;
 
         public TestStartSessionView() {
-            Context.ViewModelType = typeof(StartSessionViewModel);
             StartAction = new TestAction();
             TicketIDControl = new TestControl<string>();
             var api = Context.OfType<StartSessionViewModel>();

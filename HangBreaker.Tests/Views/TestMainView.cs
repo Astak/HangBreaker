@@ -4,7 +4,7 @@ using HangBreaker.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HangBreaker.Tests.Views {
-    public class TestMainView :TestBaseView {
+    public class TestMainView :TestBaseView<MainViewModel> {
         public const string StartActionName = "Start";
         public const string RestartActionName = "Restart";
         public const string TimerActionName = "Timer";
@@ -13,7 +13,6 @@ namespace HangBreaker.Tests.Views {
         public const string OpacityEditorName = "Opacity";
 
         public TestMainView() {
-            Context.ViewModelType = typeof(MainViewModel);
             var StartAction = new TestAction();
             var RestartAction = new TestAction();
             var TimerAction = new TestAction();

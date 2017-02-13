@@ -4,14 +4,20 @@ using System.Collections.Generic;
 using System.Globalization;
 
 namespace HangBreaker.Tests.Views {
-    public class TestBaseView {
+    public abstract class TestBaseView {
         private readonly Dictionary<string, TestAction> Actions = new Dictionary<string, TestAction>();
         private readonly Dictionary<string, TestControlBase> Editors = new Dictionary<string, TestControlBase>();
 
-        private MVVMContext fContext = new MVVMContext();
+        public TestBaseView() {
+            fContext = new MVVMContext();
+        }
+
+        private MVVMContext fContext;
         protected MVVMContext Context {
             get { return fContext; }
         }
+
+        public abstract object ViewModel { get; }
 
         public void SetParameter(object parameter) {
             MVVMContext.SetParameter(Context, parameter);
@@ -74,5 +80,16 @@ namespace HangBreaker.Tests.Views {
                 throw new System.InvalidOperationException(msg);
             }
         }
+    }
+
+    public class TestBaseView<TViewModel> : TestBaseView {
+        public TestBaseView() {
+            Context.ViewModelType = typeof(TViewModel);
+        }
+
+        public override object ViewModel {
+            get { return Context.GetViewModel<TViewModel>(); }
+        }
+        
     }
 }
