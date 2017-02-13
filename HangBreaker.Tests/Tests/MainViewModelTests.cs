@@ -26,8 +26,7 @@ namespace HangBreaker.Tests {
             TestWorkState();
             WaitFor(WorkInterval);
             TestWorkOverflowState();
-            // TODO
-            //documentManagerService.DoAction(TestMainView.CloseActionName);
+            documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
@@ -63,8 +62,7 @@ namespace HangBreaker.Tests {
             RestartSession();
             WaitFor(276);
             TestReviewState();
-            // TODO
-            //documentManagerService.DoAction(TestMainView.CloseActionName);
+            documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
@@ -98,8 +96,7 @@ namespace HangBreaker.Tests {
             WaitFor(1);
             displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("Overtime", displayValue);
-            // TODO
-            //documentManagerService.DoAction(TestMainView.CloseActionName);
+            documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         [TestMethod]
@@ -127,8 +124,7 @@ namespace HangBreaker.Tests {
             WaitFor(213);
             isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
             Assert.IsTrue(isTransparent);
-            // TODO
-            //documentManagerService.DoAction(TestMainView.CloseActionName);
+            documentManagerService.DoAction(TestMainView.CloseActionName);
         }
 
         private static TestDocumentManagerService StartMainView() {

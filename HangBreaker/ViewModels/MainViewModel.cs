@@ -85,6 +85,11 @@ namespace HangBreaker.ViewModels {
             else State.OnElapsed();
         }
 
+        public void Close() {
+            IDocument doc = DocumentManagerService.FindDocument(this);
+            doc.Close();
+        }
+
         private void UpdateState(ViewModelState state) {
             State = state;
             this.RaiseCanExecuteChanged(vm => vm.Start());
