@@ -61,6 +61,7 @@
     <Compile Include="Services\Documents\TestViewService.cs" />
     <Compile Include="Services\TestXpoService.cs" />
     <Compile Include="Tests\SetStatusViewModelTests.cs" />
+    <Compile Include="Tests\SharedMethods.cs" />
     <Compile Include="Tests\StartSessionViewModelTests.cs" />
     <Compile Include="Tests\MainViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

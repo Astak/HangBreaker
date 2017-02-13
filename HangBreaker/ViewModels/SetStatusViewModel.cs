@@ -24,7 +24,7 @@ namespace HangBreaker.ViewModels {
             workSession.Status = Status.Value;
             workSession.EndTime = DateTime.Now;
             uow.CommitChanges();
-            DocumentManagerService.ActiveDocument.Close();
+            this.CloseDocument();
         }
 
         public bool CanOk() {
