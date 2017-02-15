@@ -6,9 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HangBreaker.Tests {
     public static class SharedMethods {
-        public static TestDocumentManagerService StartMainView() {
+        public static TestDocumentManagerService StartView(string viewName, object parameter = null) {
             var documentManagerService = (TestDocumentManagerService)ServiceContainer.Default.GetService<IDocumentManagerService>(HangBreaker.Utils.Constants.ServiceKey);
-            IDocument document = documentManagerService.CreateDocument(HangBreaker.Utils.Constants.MainViewName, null, null);
+            IDocument document = documentManagerService.CreateDocument(viewName, parameter, null);
             document.Show();
             return documentManagerService;
         }

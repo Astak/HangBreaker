@@ -24,7 +24,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void StartActionTest() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             SharedMethods.TestInitialState();
             SharedMethods.StartNewTicket("T123456");
             SharedMethods.TestReviewState();
@@ -39,7 +39,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void RestartActionTest() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             SharedMethods.StartNewTicket("T123456");
             SharedMethods.WaitFor(147);
             SharedMethods.TestReviewState();
@@ -75,7 +75,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void DisplayTest() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             var displayValue = documentManagerService.GetEditorValue<string>(TestMainView.DisplayEditorName);
             Assert.AreEqual("Hello", displayValue);
             SharedMethods.StartNewTicket("T123456");
@@ -109,7 +109,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void OpacityTest() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             SharedMethods.StartNewTicket("T123456");
             SharedMethods.WaitFor(ReviewInterval);
             var isTransparent = documentManagerService.GetEditorValue<bool>(TestMainView.OpacityEditorName);
@@ -137,7 +137,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void StartSessionSetsStartTime() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             SharedMethods.StartNewTicket("T123456");
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
             Session session = xpoService.GetSession();
@@ -151,7 +151,7 @@ namespace HangBreaker.Tests {
 
         [TestMethod]
         public void RestartSessionSetsEndTime() {
-            TestDocumentManagerService documentManagerService = SharedMethods.StartMainView();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.MainViewName);
             SharedMethods.StartNewTicket("T123456");
             SharedMethods.RestartSession("T123457");
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();

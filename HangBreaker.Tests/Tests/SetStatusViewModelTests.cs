@@ -3,6 +3,7 @@ using DevExpress.Xpo;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
 using HangBreaker.Tests.Services;
+using HangBreaker.Tests.Services.Documents;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -35,10 +36,9 @@ namespace HangBreaker.Tests {
         [TestMethod]
         public void SetStatusUpdatesExistingRecordInSessionTableTest() {
             var workSession = CreateTestWorkSession();
-            var view = new TestSetStatusView();
-            view.SetParameter(workSession.Oid);
-            view.StatusControl.Value = WorkSessionStatus.NeedExample;
-            view.OKAction.Execute();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.SetStatusViewName, workSession.Oid);
+            documentManagerService.SetEditorValue(TestSetStatusView.SetStatusEditorName, WorkSessionStatus.NeedExample);
+            documentManagerService.DoAction(TestSetStatusView.OKActionName);
             workSession.Reload();
             Assert.AreEqual<WorkSessionStatus>(WorkSessionStatus.NeedExample, workSession.Status.Value);
         }

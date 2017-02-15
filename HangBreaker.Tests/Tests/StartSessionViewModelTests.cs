@@ -49,30 +49,31 @@ namespace HangBreaker.Tests {
         }
 
         [TestMethod]
-        public void StartSessionAddsNewRectordToSessionTable() {
+        public void StartSessionUpdatesTicketID() {
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            Session session = xpoService.GetSession();
-            var view = new TestStartSessionView();
-            view.TicketIDControl.Value = "T123456";
-            view.StartAction.Execute();
-            var sessions = session.Query<WorkSession>().Select(ws => ws.TicketID).ToArray();
-            Assert.AreEqual(1, sessions.Length);
-            Assert.AreEqual("T123456", sessions[0]);
+            UnitOfWork session = xpoService.GetUnitOfWork();
+            var workSession = new WorkSession(session);
+            session.CommitChanges();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.StartSessionViewName, workSession.Oid);
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+            workSession.Reload();
+            Assert.AreEqual("T123456", workSession.TicketID);
         }
 
         [TestMethod]
         public void StartSessionInitializesStartTime() {
-            var view = new TestStartSessionView();
-            view.TicketIDControl.Value = "T123456";
-            view.StartAction.Execute();
             var xpoService = ServiceContainer.Default.GetService<IXpoService>();
-            Session session = xpoService.GetSession();
-            int testResult = session.Query<WorkSession>()
-                .Where(s => s.TicketID == "T123456" &&
-                    s.StartTime > DateTime.Now.AddSeconds(-1) &&
-                    s.StartTime <= DateTime.Now.AddSeconds(1))
-               .Count();
-            Assert.AreEqual(1, testResult);
+            UnitOfWork uow = xpoService.GetUnitOfWork();
+            var workSession = new WorkSession(uow);
+            uow.CommitChanges();
+            TestDocumentManagerService documentManagerService = SharedMethods.StartView(HangBreaker.Utils.Constants.StartSessionViewName, workSession.Oid);
+            documentManagerService.SetEditorValue(TestStartSessionView.TicketIDEditorName, "T123456");
+            documentManagerService.DoAction(TestStartSessionView.OKActionName);
+            workSession.Reload();
+            DateTime from = DateTime.Now.AddSeconds(-1);
+            DateTime to = DateTime.Now.AddSeconds(1);
+            Assert.IsTrue(workSession.StartTime > from && workSession.StartTime <= to);
         }
     }
 }
