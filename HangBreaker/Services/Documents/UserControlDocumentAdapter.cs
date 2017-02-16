@@ -12,7 +12,7 @@ namespace HangBreaker.Documents {
         }
         #region IDocumentAdapter
         void IDocumentAdapter.Close(Control control, bool force) {
-            control.Parent = null;
+            control.Dispose();
         }
 
         event EventHandler IDocumentAdapter.Closed {
