@@ -46,5 +46,14 @@ namespace HangBreaker.Tests.UI {
             adapter.Close(control);
             Assert.IsNull(control.Parent);
         }
+
+        [TestMethod]
+        public void CloseDisposesControl() {
+            var form = new Form();
+            var control = new Control();
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Close(control);
+            Assert.IsTrue(control.IsDisposed);
+        }
     }
 }
