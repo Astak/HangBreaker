@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangBreaker.Tests", "HangBr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangBreaker.BusinessModel", "HangBreaker.BusinessModel\HangBreaker.BusinessModel.csproj", "{B447BD15-D74A-44EC-8324-54B51029A7C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangBreaker.Tests.UI", "HangBreaker.Tests.UI\HangBreaker.Tests.UI.csproj", "{8CD3AF94-DC76-4F43-A398-057DF402D3F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{B447BD15-D74A-44EC-8324-54B51029A7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B447BD15-D74A-44EC-8324-54B51029A7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B447BD15-D74A-44EC-8324-54B51029A7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CD3AF94-DC76-4F43-A398-057DF402D3F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CD3AF94-DC76-4F43-A398-057DF402D3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CD3AF94-DC76-4F43-A398-057DF402D3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CD3AF94-DC76-4F43-A398-057DF402D3F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
