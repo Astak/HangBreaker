@@ -28,6 +28,7 @@ namespace HangBreaker.Documents {
         void IDocumentAdapter.Show(Control control) {
             control.Dock = DockStyle.Fill;
             control.Parent = form;
+            control.BringToFront();
         }
 
         void IDisposable.Dispose() {

@@ -24,5 +24,17 @@ namespace HangBreaker.Tests.UI {
             adapter.Show(control);
             Assert.AreEqual<DockStyle>(DockStyle.Fill, control.Dock);
         }
+
+        [TestMethod]
+        public void ShowBringsToFront() {
+            var form = new Form();
+            var control = new Control();
+            var testControl = new Control();
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Show(control);
+            adapter.Show(testControl);
+            int index = form.Controls.GetChildIndex(testControl);
+            Assert.AreEqual<int>(0, index);
+        }
     }
 }
