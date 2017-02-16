@@ -36,5 +36,15 @@ namespace HangBreaker.Tests.UI {
             int index = form.Controls.GetChildIndex(testControl);
             Assert.AreEqual<int>(0, index);
         }
+
+        [TestMethod]
+        public void CloseRemovesFromParent() {
+            var form = new Form();
+            var control = new Control();
+            control.Parent = form;
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Close(control);
+            Assert.IsNull(control.Parent);
+        }
     }
 }
