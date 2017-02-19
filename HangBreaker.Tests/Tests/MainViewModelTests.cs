@@ -4,7 +4,6 @@ using HangBreaker.BusinessModel;
 using HangBreaker.Services;
 using HangBreaker.Tests.Services;
 using HangBreaker.Tests.Services.Documents;
-using HangBreaker.Tests.Utils;
 using HangBreaker.Tests.Views;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

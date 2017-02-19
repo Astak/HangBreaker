@@ -41,43 +41,18 @@ namespace HangBreaker.ViewModels {
             State.Start();
         }
 
-        private void CreateSessionAsync(Action callback) {
+        private async void CreateSessionAsync() {
             using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
                 var workSession = new WorkSession(uow);
                 uow.CommitChanges();
-                WorkSessionKey = workSession.Oid;
+                WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.StartSessionViewName, workSession.Oid, null);
             }
-            IDocument document = DocumentManagerService.CreateDocument(Constants.StartSessionViewName, WorkSessionKey, null);
-            document.Show();
-            ActiveDocumentChangedEventHandler handler = null;
-            handler = (s, e) => {
-                DocumentManagerService.ActiveDocumentChanged -= handler;
-                callback();
-            };
-            DocumentManagerService.ActiveDocumentChanged += handler;
-        }
-
-        public void Restart() {
-            IDocument document = DocumentManagerService.CreateDocument(Constants.SetStatusViewName, WorkSessionKey, null);
-            document.Show();
-            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChangedAfterSetStatus;
-        }
-
-        private void OnActiveDocumentChangedAfterSetStatus(object sender, ActiveDocumentChangedEventArgs e) {
-            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChangedAfterSetStatus;
-            using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
-                var workSession = new WorkSession(uow);
-                uow.CommitChanges();
-                WorkSessionKey = workSession.Oid;
-            }
-            IDocument document = DocumentManagerService.CreateDocument(Constants.StartSessionViewName, WorkSessionKey, null);
-            document.Show();
-            DocumentManagerService.ActiveDocumentChanged += OnActiveDocumentChangedAfterStartSession;
-        }
-
-        private void OnActiveDocumentChangedAfterStartSession(object sender, ActiveDocumentChangedEventArgs e) {
-            DocumentManagerService.ActiveDocumentChanged -= OnActiveDocumentChangedAfterStartSession;
             UpdateState(new PreviewViewModelState(this));
+        }
+
+        public async void Restart() {
+            WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.SetStatusViewName, WorkSessionKey, null);
+            CreateSessionAsync();
         }
 
         public void Tick() {
@@ -166,7 +141,7 @@ namespace HangBreaker.ViewModels {
             }
 
             protected override void Start() {
-                ViewModel.CreateSessionAsync(() => ViewModel.UpdateState(new PreviewViewModelState(ViewModel)));
+                ViewModel.CreateSessionAsync();
             }
 
             protected override void OnElapsed() { }
