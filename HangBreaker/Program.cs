@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DevExpress.Mvvm;
+using DevExpress.Utils.MVVM.Services;
+using HangBreaker.Utils;
+using System;
 using System.Windows.Forms;
 
 namespace HangBreaker {
@@ -13,7 +13,9 @@ namespace HangBreaker {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            var form = new MainForm();
+            ServiceContainer.Default.RegisterService(Constants.ServiceKey, DocumentManagerService.Create(form));
+            Application.Run(form);
         }
     }
 }
