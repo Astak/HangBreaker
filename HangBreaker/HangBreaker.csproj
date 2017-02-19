@@ -72,10 +72,10 @@
     <Compile Include="Services\IXpoService.cs" />
     <Compile Include="Services\XpoService.cs" />
     <Compile Include="Utils\Constants.cs" />
+    <Compile Include="ViewModels\IDocumentManagerServiceExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SetStatusViewModel.cs" />
     <Compile Include="ViewModels\StartSessionViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelExtensions.cs" />
     <Compile Include="Views\MainView.cs">
       <SubType>UserControl</SubType>
     </Compile>

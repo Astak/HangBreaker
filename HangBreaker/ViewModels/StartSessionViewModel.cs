@@ -25,7 +25,7 @@ namespace HangBreaker.ViewModels {
                 session.TicketID = TicketID;
                 uow.CommitChanges();
             }
-            this.CloseDocument();
+            DocumentManagerService.CloseDocument(this);
         }
 
         public bool CanStart() {
