@@ -1,11 +1,9 @@
 ﻿using DevExpress.Mvvm;
-using HangBreaker.Utils;
 using System.Threading.Tasks;
 
 namespace HangBreaker.ViewModels {
-    public static class ViewModelExtensions {
-        public static void CloseDocument(this object viewModel) {
-            var documentManagerService = ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.ServiceKey);
+    public static class IDocumentManagerServiceExtensions {
+        public static void CloseDocument(this IDocumentManagerService documentManagerService, object viewModel) {
             IDocument document = documentManagerService.FindDocument(viewModel);
             document.Close();
         }

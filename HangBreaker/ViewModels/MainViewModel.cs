@@ -61,7 +61,7 @@ namespace HangBreaker.ViewModels {
         }
 
         public void Close() {
-            this.CloseDocument();
+            DocumentManagerService.CloseDocument(this);
         }
 
         private void UpdateState(ViewModelState state) {
