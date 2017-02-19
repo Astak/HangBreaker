@@ -1,11 +1,13 @@
-﻿using HangBreaker.ViewModels;
+﻿using DevExpress.Utils.MVVM.Services;
+using HangBreaker.Documents;
+using HangBreaker.ViewModels;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace HangBreaker {
-    public partial class MainForm : Form {
+    public sealed partial class MainForm : Form, IDocumentAdapterFactory {
         private Pen StartPen;
         private Pen RestartPen;
         private Pen ClosePen;
@@ -85,5 +87,8 @@ namespace HangBreaker {
             e.Graphics.DrawLine(ClosePen, centerPoint.X - crossSize, centerPoint.Y - crossSize, centerPoint.X + crossSize, centerPoint.Y + crossSize);
             e.Graphics.DrawLine(ClosePen, centerPoint.X + crossSize, centerPoint.Y - crossSize, centerPoint.X - crossSize, centerPoint.Y + crossSize);
         }
+        #region IDocumentAdapterFactory
+        IDocumentAdapter IDocumentAdapterFactory.Create() => new UserControlDocumentAdapter(this);
+        #endregion
     }
 }
