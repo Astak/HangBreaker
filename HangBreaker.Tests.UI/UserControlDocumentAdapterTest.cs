@@ -64,5 +64,38 @@ namespace HangBreaker.Tests.UI {
             adapter.Close(control);
             Assert.IsTrue(form.IsDisposed);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(TestException))]
+        public void CloseRaisesClosingEvent() {
+            var form = new Form();
+            var control = new Control();
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Closing += (s, e) => { throw new TestException(); };
+            adapter.Close(control);
+        }
+
+        [TestMethod]
+        public void ClosingCanCancelClose() {
+            var form = new Form();
+            var control = new Control();
+            control.Parent = form;
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Closing += (s, e) => e.Cancel = true;
+            adapter.Close(control);
+            Assert.AreEqual<Control>(form, control.Parent);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TestException))]
+        public void CloseRaisesClosedEvent() {
+            var form = new Form();
+            var control = new Control();
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Closed += (s, e) => { throw new TestException(); };
+            adapter.Close(control);
+        }
     }
+
+    public class TestException : Exception { }
 }

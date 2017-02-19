@@ -12,18 +12,30 @@ namespace HangBreaker.Documents {
         }
         #region IDocumentAdapter
         void IDocumentAdapter.Close(Control control, bool force) {
+            if (!RaiseClosing()) return; 
             control.Dispose();
             form.Close();
+            RaiseClosed();
         }
 
+        private EventHandler fClosed;
         event EventHandler IDocumentAdapter.Closed {
-            add { throw new System.NotImplementedException(); }
-            remove { throw new System.NotImplementedException(); }
+            add { fClosed += value; }
+            remove { fClosed -= value; }
+        }
+        private void RaiseClosed() {
+            fClosed?.Invoke(this, EventArgs.Empty);
         }
 
+        private CancelEventHandler fClosing;
         event CancelEventHandler IDocumentAdapter.Closing {
-            add { throw new System.NotImplementedException(); }
-            remove { throw new System.NotImplementedException(); }
+            add { fClosing += value; }
+            remove { fClosing -= value ; }
+        }
+        private bool RaiseClosing() {
+            var args = new CancelEventArgs();
+            fClosing?.Invoke(this, args);
+            return !args.Cancel;
         }
 
         void IDocumentAdapter.Show(Control control) {
