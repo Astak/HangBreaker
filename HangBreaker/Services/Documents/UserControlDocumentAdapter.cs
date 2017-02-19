@@ -14,7 +14,7 @@ namespace HangBreaker.Documents {
         void IDocumentAdapter.Close(Control control, bool force) {
             if (!RaiseClosing()) return; 
             control.Dispose();
-            form.Close();
+            if (form.Controls.Count == 0) form.Close();
             RaiseClosed();
         }
 

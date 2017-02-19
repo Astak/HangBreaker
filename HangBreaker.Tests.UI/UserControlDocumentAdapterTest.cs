@@ -66,6 +66,17 @@ namespace HangBreaker.Tests.UI {
         }
 
         [TestMethod]
+        public void CloseDoesNotDisposeParentIfOpenDocumentExists() {
+            var form = new Form();
+            var control = new Control();
+            control.Parent = form;
+            var documentControl = new Control();
+            IDocumentAdapter adapter = new UserControlDocumentAdapter(form);
+            adapter.Close(documentControl);
+            Assert.IsFalse(form.IsDisposed);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(TestException))]
         public void CloseRaisesClosingEvent() {
             var form = new Form();
