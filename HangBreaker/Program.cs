@@ -13,9 +13,7 @@ namespace HangBreaker {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var form = new MainForm();
-            ServiceContainer.Default.RegisterService(Constants.ServiceKey, DocumentManagerService.Create(form));
-            Application.Run(form);
+            Application.Run(new MainForm());
         }
     }
 }

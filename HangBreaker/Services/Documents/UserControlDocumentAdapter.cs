@@ -44,9 +44,7 @@ namespace HangBreaker.Documents {
             control.BringToFront();
         }
 
-        void IDisposable.Dispose() {
-            throw new System.NotImplementedException();
-        }
+        void IDisposable.Dispose() { }
         #endregion
     }
 }
