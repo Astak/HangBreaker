@@ -1,31 +1,23 @@
-﻿using DevExpress.Mvvm;
-using DevExpress.Mvvm.POCO;
+﻿using DevExpress.Mvvm.POCO;
 using DevExpress.Xpo;
 using HangBreaker.BusinessModel;
 using HangBreaker.Services;
-using HangBreaker.Utils;
 
 namespace HangBreaker.ViewModels {
-    public class StartSessionViewModel :ISupportParameter {
-        private int WorkSessionKey;
-
+    public class StartSessionViewModel :ChildViewModel {
         public virtual string TicketID { get; set; }
 
         protected virtual IXpoService XpoService {
             get { throw new System.NotImplementedException(); }
         }
 
-        protected IDocumentManagerService DocumentManagerService {
-            get { return ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.ServiceKey); }
-        }
-
         public void Start() {
             using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
-                var session = uow.GetObjectByKey<WorkSession>(WorkSessionKey);
+                var session = uow.GetObjectByKey<WorkSession>(ID);
                 session.TicketID = TicketID;
                 uow.CommitChanges();
             }
-            DocumentManagerService.CloseDocument(this);
+            Close();
         }
 
         public bool CanStart() {
@@ -35,11 +27,5 @@ namespace HangBreaker.ViewModels {
         protected virtual void OnTicketIDChanged() {
             this.RaiseCanExecuteChanged(vm => vm.Start());
         }
-        #region ISupportParameter
-        object ISupportParameter.Parameter {
-            get { return WorkSessionKey; }
-            set { WorkSessionKey = (int)value; }
-        }
-        #endregion
     }
 }

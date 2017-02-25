@@ -8,7 +8,7 @@ using HangBreaker.Services;
 using HangBreaker.BusinessModel;
 
 namespace HangBreaker.ViewModels {
-    public class MainViewModel {
+    public class MainViewModel :BaseViewModel {
         private IViewModelState State;
         private int Elapsed;
         private int WorkSessionKey;
@@ -20,10 +20,6 @@ namespace HangBreaker.ViewModels {
 
         public virtual string DisplayText { get; protected set; }
         public virtual bool IsTransparent { get; set; }
-
-        private IDocumentManagerService DocumentManagerService {
-            get { return ServiceContainer.Default.GetService<IDocumentManagerService>(Constants.ServiceKey); }
-        }
 
         protected virtual IXpoService XpoService {
             get { throw new System.NotImplementedException(); }
@@ -45,23 +41,19 @@ namespace HangBreaker.ViewModels {
             using (UnitOfWork uow = XpoService.GetUnitOfWork()) {
                 var workSession = new WorkSession(uow);
                 uow.CommitChanges();
-                WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.StartSessionViewName, workSession.Oid, null);
+                WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.StartSessionViewName, workSession.Oid, this);
             }
             UpdateState(new PreviewViewModelState(this));
         }
 
         public async void Restart() {
-            WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.SetStatusViewName, WorkSessionKey, null);
+            WorkSessionKey = await DocumentManagerService.ShowDocumentAsync(Constants.SetStatusViewName, WorkSessionKey, this);
             CreateSessionAsync();
         }
 
         public void Tick() {
             if (--Elapsed > 0) UpdateDisplayText();
             else State.OnElapsed();
-        }
-
-        public void Close() {
-            DocumentManagerService.CloseDocument(this);
         }
 
         private void UpdateState(ViewModelState state) {

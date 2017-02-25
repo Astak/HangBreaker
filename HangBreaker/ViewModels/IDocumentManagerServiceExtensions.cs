@@ -8,17 +8,11 @@ namespace HangBreaker.ViewModels {
             document.Close();
         }
 
-        public static Task<TParameter> ShowDocumentAsync<TParameter>(this IDocumentManagerService documentManagerService, string documentType, TParameter parameter, object parentViewModel) {
+        public static Task<int> ShowDocumentAsync(this IDocumentManagerService documentManagerService, string documentType, int parameter, object parentViewModel) {
             IDocument document = documentManagerService.CreateDocument(documentType, parameter, parentViewModel);
             document.Show();
-            ActiveDocumentChangedEventHandler handler = null;
-            var taskCompletionSource = new TaskCompletionSource<TParameter>();
-            handler = (s, e) => {
-                documentManagerService.ActiveDocumentChanged -= handler;
-                taskCompletionSource.SetResult(parameter);
-            };
-            documentManagerService.ActiveDocumentChanged += handler;
-            return taskCompletionSource.Task;
+            var childViewModel = (ChildViewModel)document.Content;
+            return childViewModel.Promise.Task;
         }
     }
 }
