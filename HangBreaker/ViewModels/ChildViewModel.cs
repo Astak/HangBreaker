@@ -8,7 +8,6 @@ namespace HangBreaker.ViewModels {
         }
 
         protected int ID { get; private set; }
-        protected IParentViewModel ParentViewModel { get; private set; }
         public TaskCompletionSource<int> Promise { get; private set; }
 
         public override void  Close() {
